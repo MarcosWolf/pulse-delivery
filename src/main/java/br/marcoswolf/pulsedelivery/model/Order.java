@@ -17,8 +17,9 @@ public class Order {
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long id;
 
-    private String customerName;
-    private String address;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;

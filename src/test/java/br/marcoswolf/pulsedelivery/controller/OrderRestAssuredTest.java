@@ -1,5 +1,7 @@
 package br.marcoswolf.pulsedelivery.controller;
 
+import br.marcoswolf.pulsedelivery.dto.AddressDTO;
+import br.marcoswolf.pulsedelivery.dto.CustomerDTO;
 import br.marcoswolf.pulsedelivery.dto.OrderDTO;
 import br.marcoswolf.pulsedelivery.mapper.OrderMapper;
 import br.marcoswolf.pulsedelivery.model.Order;
@@ -41,13 +43,11 @@ public class OrderRestAssuredTest {
 
     @Test
     void shouldCreateOrderSuccessfully() {
-        OrderDTO dto = new OrderDTO(
-                null,
-                "Marcos Vinícios",
-                "Rua Lobo, 123",
-                OrderStatus.CREATED,
-                LocalDateTime.now()
+        AddressDTO address = new AddressDTO(
+                "Rua Lobo", "123", null, null, "Cidade X", "São Paulo", "00000-000", "Brasil"
         );
+        CustomerDTO customer = new CustomerDTO(null, "Marcos Vinícios", "viniciosramos.dev@gmail.com", address);
+        OrderDTO dto = new OrderDTO(null, customer, OrderStatus.CREATED, LocalDateTime.now());
 
         given()
                 .contentType(ContentType.JSON)
@@ -58,19 +58,23 @@ public class OrderRestAssuredTest {
                 .statusCode(201)
                 .header("Location", notNullValue())
                 .header("Location", matchesPattern(".*/orders/\\d+"))
-                .body("customerName", equalTo("Marcos Vinícios"))
+                .body("customer.name", equalTo("Marcos Vinícios"))
                 .body("id", notNullValue());
     }
 
     @Test
     void shouldUpdateOrderSuccessfully() {
-        OrderDTO dto = new OrderDTO(null, "Marcos", "Rua Y", OrderStatus.CREATED, LocalDateTime.now());
+        AddressDTO address = new AddressDTO(
+                "Rua Lobo", "123", null, null, "Cidade X", "São Paulo", "00000-000", "Brasil"
+        );
+        CustomerDTO customer = new CustomerDTO(null, "Marcos Vinícios", "viniciosramos.dev@gmail.com", address);
+        OrderDTO dto = new OrderDTO(null, customer, OrderStatus.CREATED, LocalDateTime.now());
+
         Order saved = orderRepository.saveAndFlush(mapper.toEntity(dto));
 
         OrderDTO updateDto = new OrderDTO(
                 null,
-                "Marcos",
-                "Rua Y",
+                null,
                 OrderStatus.DELIVERED,
                 null
         );
@@ -82,19 +86,17 @@ public class OrderRestAssuredTest {
                 .put("/{id}", saved.getId())
                 .then()
                 .statusCode(200)
-                .body("customerName", equalTo("Marcos"))
+                .body("customer.name", equalTo("Marcos Vinícios"))
                 .body("status", equalTo("DELIVERED"));
     }
 
     @Test
     void shouldReturnAllOrders() {
-        OrderDTO dto = new OrderDTO(
-                null,
-                "Marcos Vinícios",
-                "Rua Lobo, 123",
-                OrderStatus.CREATED,
-                LocalDateTime.now()
+        AddressDTO address = new AddressDTO(
+                "Rua Lobo", "123", null, null, "Cidade X", "São Paulo", "00000-000", "Brasil"
         );
+        CustomerDTO customer = new CustomerDTO(null, "Marcos Vinícios", "viniciosramos.dev@gmail.com", address);
+        OrderDTO dto = new OrderDTO(null, customer, OrderStatus.CREATED, LocalDateTime.now());
 
         orderRepository.saveAndFlush(mapper.toEntity(dto));
 
@@ -104,18 +106,16 @@ public class OrderRestAssuredTest {
         .then()
                 .statusCode(200)
                 .body("$", hasSize(1))
-                .body("[0].customerName", equalTo("Marcos Vinícios"));
+                .body("[0].customer.name", equalTo("Marcos Vinícios"));
     }
 
     @Test
     void shouldFindOrderbyId() {
-        OrderDTO dto = new OrderDTO(
-                null,
-                "Marcos Vinícios",
-                "Rua Lobo, 123",
-                OrderStatus.CREATED,
-                LocalDateTime.now()
+        AddressDTO address = new AddressDTO(
+                "Rua Lobo", "123", null, null, "Cidade X", "São Paulo", "00000-000", "Brasil"
         );
+        CustomerDTO customer = new CustomerDTO(null, "Marcos Vinícios", "viniciosramos.dev@gmail.com", address);
+        OrderDTO dto = new OrderDTO(null, customer, OrderStatus.CREATED, LocalDateTime.now());
 
         Order savedOrder = orderRepository.saveAndFlush(mapper.toEntity(dto));
 
@@ -125,7 +125,7 @@ public class OrderRestAssuredTest {
         .then()
                 .statusCode(200)
                 .body("id", equalTo(savedOrder.getId().intValue()))
-                .body("customerName", equalTo("Marcos Vinícios"));
+                .body("customer.name", equalTo("Marcos Vinícios"));
     }
 
     @Test

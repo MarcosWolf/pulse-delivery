@@ -1,5 +1,7 @@
 package br.marcoswolf.pulsedelivery.service;
 
+import br.marcoswolf.pulsedelivery.dto.AddressDTO;
+import br.marcoswolf.pulsedelivery.dto.CustomerDTO;
 import br.marcoswolf.pulsedelivery.dto.OrderDTO;
 import br.marcoswolf.pulsedelivery.mapper.OrderMapper;
 import br.marcoswolf.pulsedelivery.model.Order;
@@ -29,39 +31,62 @@ public class OrderIntegrationTest {
 
     @Test
     void shouldSaveAndReturnOrder() {
-        OrderDTO dto = new OrderDTO(
-                null,
-                "Marcos Vinícios",
-                "Rua Lobo, 123",
-                OrderStatus.CREATED,
-                LocalDateTime.now()
-        );
+            AddressDTO addressDTO = new AddressDTO(
+                    "Rua Lobo", "123", null, null, "Cidade X", "São Paulo", "00000-000", "Brasil"
+            );
+            CustomerDTO customerDTO = new CustomerDTO(
+                    null, "Marcos Vinícios", "viniciosramos.dev@gmail.com", addressDTO
+            );
+            OrderDTO dto = new OrderDTO(
+                    null,
+                    customerDTO,
+                    OrderStatus.CREATED,
+                    null
+            );
 
         Order savedOrder = orderService.createOrder(dto);
 
-        assertNotNull(savedOrder.getId());;
+        assertNotNull(savedOrder.getId());
+        assertNotNull(savedOrder.getCustomer());
+        assertEquals("Marcos Vinícios", savedOrder.getCustomer().getName());
+        assertEquals("viniciosramos.dev@gmail.com", savedOrder.getCustomer().getEmail());
+        assertEquals(OrderStatus.CREATED, savedOrder.getStatus());
 
         Optional<Order> foundOrder = orderService.getOrderById(savedOrder.getId());
 
         assertTrue(foundOrder.isPresent());
-        assertEquals("Marcos Vinícios", foundOrder.get().getCustomerName());
+        assertEquals("Marcos Vinícios", foundOrder.get().getCustomer().getName());
+        assertEquals("Rua Lobo", foundOrder.get().getCustomer().getAddress().getStreet());
+        assertEquals("123", foundOrder.get().getCustomer().getAddress().getNumber());
     }
 
     @Test
     void shouldUpdateOrderSuccessfully() {
-        OrderDTO dto = new OrderDTO(null, "Cliente X", "Rua Y", OrderStatus.CREATED, null);
+        AddressDTO addressDTO = new AddressDTO(
+                "Rua Y", "456", null, null, "Cidade Y", "Rio de Janeiro", "11111-111", "Brasil"
+        );
+        CustomerDTO customerDTO = new CustomerDTO(
+                null, "Cliente X", "cliente@example.com", addressDTO
+        );
+        OrderDTO dto = new OrderDTO(null, customerDTO, OrderStatus.CREATED, null);
+
         Order saved = orderService.createOrder(dto);
 
-        OrderDTO updateDTO = new OrderDTO(
-                saved.getId(),
-                saved.getCustomerName(),
-                saved.getAddress(),
-                OrderStatus.DELIVERED,
-                saved.getCreatedAt()
-        );
+        Order orderToUpdate = new Order();
+        orderToUpdate.setId(saved.getId());
+        orderToUpdate.setCustomer(saved.getCustomer());
+        orderToUpdate.setStatus(OrderStatus.DELIVERED);
+        orderToUpdate.setCreatedAt(saved.getCreatedAt());
 
-        Order updated = orderService.updateOrder(saved.getId(), mapper.toEntity(updateDTO));
+        Order updated = orderService.updateOrder(saved.getId(), orderToUpdate);
 
+        assertNotNull(updated);
+        assertEquals(saved.getId(), updated.getId());
         assertEquals(OrderStatus.DELIVERED, updated.getStatus());
+        assertEquals("Cliente X", updated.getCustomer().getName());
+
+        Optional<Order> foundOrder = orderRepository.findById(updated.getId());
+        assertTrue(foundOrder.isPresent());
+        assertEquals(OrderStatus.DELIVERED, foundOrder.get().getStatus());
     }
 }
