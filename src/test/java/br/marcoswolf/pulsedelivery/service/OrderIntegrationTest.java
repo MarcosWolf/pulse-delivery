@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,30 +20,18 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 public class OrderIntegrationTest {
     @Autowired
-    private OrderService orderService;
+    private OrderService service;
 
     @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
-    private OrderMapper mapper;
+    private OrderRepository repository;
 
     @Test
     void shouldSaveAndReturnOrder() {
-            AddressDTO addressDTO = new AddressDTO(
-                    "Rua Lobo", "123", null, null, "Cidade X", "São Paulo", "00000-000", "Brasil"
-            );
-            CustomerDTO customerDTO = new CustomerDTO(
-                    null, "Marcos Vinícios", "viniciosramos.dev@gmail.com", addressDTO
-            );
-            OrderDTO dto = new OrderDTO(
-                    null,
-                    customerDTO,
-                    OrderStatus.CREATED,
-                    null
-            );
+        AddressDTO addressDTO = createAddressDTO();
+        CustomerDTO customerDTO = createCustomerDTO();
+        OrderDTO orderDTO = createOrderDTO();
 
-        Order savedOrder = orderService.createOrder(dto);
+        Order savedOrder = service.createOrder(orderDTO);
 
         assertNotNull(savedOrder.getId());
         assertNotNull(savedOrder.getCustomer());
@@ -52,7 +39,7 @@ public class OrderIntegrationTest {
         assertEquals("viniciosramos.dev@gmail.com", savedOrder.getCustomer().getEmail());
         assertEquals(OrderStatus.CREATED, savedOrder.getStatus());
 
-        Optional<Order> foundOrder = orderService.getOrderById(savedOrder.getId());
+        Optional<Order> foundOrder = service.getOrderById(savedOrder.getId());
 
         assertTrue(foundOrder.isPresent());
         assertEquals("Marcos Vinícios", foundOrder.get().getCustomer().getName());
@@ -62,15 +49,11 @@ public class OrderIntegrationTest {
 
     @Test
     void shouldUpdateOrderSuccessfully() {
-        AddressDTO addressDTO = new AddressDTO(
-                "Rua Y", "456", null, null, "Cidade Y", "Rio de Janeiro", "11111-111", "Brasil"
-        );
-        CustomerDTO customerDTO = new CustomerDTO(
-                null, "Cliente X", "cliente@example.com", addressDTO
-        );
-        OrderDTO dto = new OrderDTO(null, customerDTO, OrderStatus.CREATED, null);
+        AddressDTO addressDTO = createAddressDTO();
+        CustomerDTO customerDTO = createCustomerDTO();
+        OrderDTO orderDTO = createOrderDTO();
 
-        Order saved = orderService.createOrder(dto);
+        Order saved = service.createOrder(orderDTO);
 
         Order orderToUpdate = new Order();
         orderToUpdate.setId(saved.getId());
@@ -78,15 +61,46 @@ public class OrderIntegrationTest {
         orderToUpdate.setStatus(OrderStatus.DELIVERED);
         orderToUpdate.setCreatedAt(saved.getCreatedAt());
 
-        Order updated = orderService.updateOrder(saved.getId(), orderToUpdate);
+        Order updated = service.updateOrder(saved.getId(), orderToUpdate);
 
         assertNotNull(updated);
         assertEquals(saved.getId(), updated.getId());
         assertEquals(OrderStatus.DELIVERED, updated.getStatus());
-        assertEquals("Cliente X", updated.getCustomer().getName());
+        assertEquals("Marcos Vinícios", updated.getCustomer().getName());
 
-        Optional<Order> foundOrder = orderRepository.findById(updated.getId());
+        Optional<Order> foundOrder = repository.findById(updated.getId());
         assertTrue(foundOrder.isPresent());
         assertEquals(OrderStatus.DELIVERED, foundOrder.get().getStatus());
+    }
+
+    private AddressDTO createAddressDTO() {
+        return new AddressDTO(
+                "Rua Lobo",
+                "123",
+                null,
+                null,
+                "Cidade X",
+                "São Paulo",
+                "00000-000",
+                "Brasil"
+        );
+    }
+
+    private CustomerDTO createCustomerDTO() {
+        return new CustomerDTO(
+                null,
+                "Marcos Vinícios",
+                "viniciosramos.dev@gmail.com",
+                createAddressDTO()
+        );
+    }
+
+    private OrderDTO createOrderDTO() {
+        return new OrderDTO(
+                null,
+                createCustomerDTO(),
+                OrderStatus.CREATED,
+                null
+        );
     }
 }
