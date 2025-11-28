@@ -27,5 +27,36 @@ O PulseDelivery é uma solução backend robusta para empresas e serviços de en
 - <b>JPA/Hibernate:</b> persistência de dados com ORM
 - <b>PostgreSQL + Docker:</b> banco de dados persistido via container Docker
 
+### Testes
+
+- <b>JUnit:</b> testes unitários e de integração
+- <b>Mockito:</b> framework de mocking para testes isolados
+- <b>REST Assured:</b> testes automatizados da API REST
+
 ### Containers e Ambiente
 - <b>Docker:</b> orquestração de containers para banco de dados e ambiente isolado
+
+## Estrutura do Projeto
+
+```text
+pulsedelivery/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── br/marcoswolf/pulsedelivery/
+│   │   │       ├── controller/       # Controladores REST
+│   │   │       ├── dto/              # DTO
+│   │   │       ├── mapper/           # Mappers
+│   │   │       ├── model/            # Classes de domínio
+│   │   │       ├── repository/       # Interfaces de acesso a dados
+│   │   │       └── service/          # Lógica de negócio
+│   │   └── resources/
+│   └── test/
+│       └── java/
+│           └── br/marcoswolf/pulsedelivery/
+│               ├── controller/     # Testes REST com RestAssured
+│               ├── service/        # Testes unitários e de integração
+│── docker-compose.yml
+├── pom.xml
+└── README.md
+```
