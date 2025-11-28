@@ -7,6 +7,7 @@ import br.marcoswolf.pulsedelivery.service.OrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,17 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO) {
         Order order = service.createOrder(orderDTO);
-        return ResponseEntity.ok(mapper.toDTO(order));
+        OrderDTO dto = mapper.toDTO(order);
+        return ResponseEntity
+                .created(URI.create("/orders/" + order.getId()))
+                .body(dto);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<OrderDTO> updateOrder(@PathVariable Long id, @RequestBody OrderDTO orderDTO) {
+        Order updatedEntity = mapper.toEntity(orderDTO);
+        Order savedOrder = service.updateOrder(id, updatedEntity);
+        return ResponseEntity.ok(mapper.toDTO(savedOrder));
     }
 
     @GetMapping
