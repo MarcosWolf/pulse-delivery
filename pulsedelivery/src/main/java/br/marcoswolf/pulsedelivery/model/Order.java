@@ -19,7 +19,9 @@ public class Order {
 
     private String customerName;
     private String address;
-    private String status;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 
     private LocalDateTime createdAt;
 }

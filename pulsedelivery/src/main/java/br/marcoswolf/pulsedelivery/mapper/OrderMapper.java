@@ -11,8 +11,8 @@ public class OrderMapper {
     public Order toEntity(OrderDTO dto) {
         Order order = new Order();
         order.setCustomerName(dto.customerName());
-        order.setStatus(dto.status());
         order.setAddress(dto.address());
+        order.setStatus(dto.status());
         order.setCreatedAt(dto.createdAt());
 
         return order;
@@ -22,8 +22,8 @@ public class OrderMapper {
         return new OrderDTO(
             order.getId(),
             order.getCustomerName(),
-            order.getStatus(),
             order.getAddress(),
+            order.getStatus(),
             order.getCreatedAt()
         );
     }
