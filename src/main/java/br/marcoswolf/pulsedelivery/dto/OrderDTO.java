@@ -6,8 +6,7 @@ import java.time.LocalDateTime;
 
 public record OrderDTO(
         Long id,
-        String customerName,
-        String address,
+        CustomerDTO customer,
         OrderStatus status,
         LocalDateTime createdAt
 ) {}

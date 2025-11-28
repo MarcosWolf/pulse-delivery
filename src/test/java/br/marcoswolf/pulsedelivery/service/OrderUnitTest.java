@@ -1,7 +1,11 @@
 package br.marcoswolf.pulsedelivery.service;
 
+import br.marcoswolf.pulsedelivery.dto.AddressDTO;
+import br.marcoswolf.pulsedelivery.dto.CustomerDTO;
 import br.marcoswolf.pulsedelivery.dto.OrderDTO;
 import br.marcoswolf.pulsedelivery.mapper.OrderMapper;
+import br.marcoswolf.pulsedelivery.model.Address;
+import br.marcoswolf.pulsedelivery.model.Customer;
 import br.marcoswolf.pulsedelivery.model.Order;
 import br.marcoswolf.pulsedelivery.model.OrderStatus;
 import br.marcoswolf.pulsedelivery.repository.OrderRepository;
@@ -31,37 +35,51 @@ public class OrderUnitTest {
 
     @Test
     void shouldCreateOrderSuccessfully() {
-        OrderDTO dto = new OrderDTO(
-                null,
-                "Marcos Vinícios",
-                "Rua Lobo, 123",
-                null,
-                null
+        AddressDTO addressDTO = new AddressDTO(
+                "Rua Lobo", "123", null, null, "Cidade X", "São Paulo", "00000-000", "Brasil"
         );
+        CustomerDTO customerDTO = new CustomerDTO(
+                null, "Marcos Vinícios", "viniciosramos.dev@gmail.com", addressDTO
+        );
+        OrderDTO inputDTO = new OrderDTO(null, customerDTO, OrderStatus.CREATED, null);
 
-        Order entity = new Order();
-        entity.setCustomerName("Marcos Vinícios");
-        entity.setAddress("Rua Lobo, 123");
+        Address address = new Address();
+        address.setStreet("Rua Lobo");
+        address.setNumber("123");
+        address.setCity("Cidade X");
+        address.setState("São Paulo");
+        address.setPostalCode("00000-000");
+        address.setCountry("Brasil");
 
-        when(mapper.toEntity(dto)).thenReturn(entity);
+        Customer customer = new Customer();
+        customer.setName("Marcos Vinícios");
+        customer.setEmail("viniciosramos.dev@gmail.com");
+        customer.setAddress(address);
+
+        Order entityToSave = new Order();
+        entityToSave.setCustomer(customer);
+        entityToSave.setStatus(OrderStatus.CREATED);
+
+        when(mapper.toEntity(inputDTO)).thenReturn(entityToSave);
 
         Order savedEntity = new Order();
         savedEntity.setId(1L);
-        savedEntity.setCustomerName("Marcos Vinícios");
-        savedEntity.setAddress("Rua Lobo, 123");
+        savedEntity.setCustomer(customer);
         savedEntity.setStatus(OrderStatus.CREATED);
         savedEntity.setCreatedAt(LocalDateTime.now());
 
         when(repository.save(any(Order.class))).thenReturn(savedEntity);
 
-        Order result = service.createOrder(dto);
+        Order result = service.createOrder(inputDTO);
 
         assertNotNull(result);
         assertEquals(1L, result.getId());
-        assertEquals("Marcos Vinícios", result.getCustomerName());
-        assertEquals("Rua Lobo, 123", result.getAddress());
+        assertEquals("Marcos Vinícios", result.getCustomer().getName());
+        assertEquals("viniciosramos.dev@gmail.com", result.getCustomer().getEmail());
         assertEquals(OrderStatus.CREATED, result.getStatus());
         assertNotNull(result.getCreatedAt());
+
+        verify(mapper).toEntity(inputDTO);
 
         ArgumentCaptor<Order> captor = ArgumentCaptor.forClass(Order.class);
         verify(repository).save(captor.capture());
@@ -73,39 +91,44 @@ public class OrderUnitTest {
 
     @Test
     void shouldUpdateOrderSuccessfully() {
-        Order existing = new Order();
-        existing.setId(1L);
-        existing.setCustomerName("Marcos Vinícios");
-        existing.setAddress("Rua Lobo, 123");
-        existing.setStatus(OrderStatus.CREATED);
-        existing.setCreatedAt(LocalDateTime.now());
+        Address address = new Address();
+        address.setStreet("Rua Lobo");
+        address.setNumber("123");
 
-        when(repository.findById(1L)).thenReturn(Optional.of(existing));
+        Customer customer = new Customer();
+        customer.setId(1L);
+        customer.setName("Marcos Vinícios");
+        customer.setEmail("viniciosramos.dev@gmail.com");
+        customer.setAddress(address);
 
-        OrderDTO updateDTO = new OrderDTO(
-                1L,
-                "Marcos Vinícios",
-                "Rua Lobo, 123",
-                OrderStatus.DELIVERED,
-                existing.getCreatedAt()
-        );
+        Order existingOrder = new Order();
+        existingOrder.setId(1L);
+        existingOrder.setCustomer(customer);
+        existingOrder.setStatus(OrderStatus.CREATED);
+        existingOrder.setCreatedAt(LocalDateTime.now().minusDays(1));
 
-        Order updatedEntity = new Order();
-        updatedEntity.setId(1L);
-        updatedEntity.setCustomerName("Marcos Vinícios");
-        updatedEntity.setAddress("Rua Lobo, 123");
-        updatedEntity.setStatus(OrderStatus.DELIVERED);
-        updatedEntity.setCreatedAt(existing.getCreatedAt());
+        when(repository.findById(1L)).thenReturn(Optional.of(existingOrder));
 
-        when(mapper.toEntity(updateDTO)).thenReturn(updatedEntity);
+        Order orderToUpdate = new Order();
+        orderToUpdate.setId(1L);
+        orderToUpdate.setCustomer(customer);
+        orderToUpdate.setStatus(OrderStatus.DELIVERED);
+        orderToUpdate.setCreatedAt(existingOrder.getCreatedAt());
 
-        when(repository.save(any(Order.class))).thenReturn(updatedEntity);
+        Order updatedOrder = new Order();
+        updatedOrder.setId(1L);
+        updatedOrder.setCustomer(customer);
+        updatedOrder.setStatus(OrderStatus.DELIVERED);
+        updatedOrder.setCreatedAt(existingOrder.getCreatedAt());
 
-        Order updated = service.updateOrder(1L, mapper.toEntity(updateDTO));
+        when(repository.save(any(Order.class))).thenReturn(updatedOrder);
 
-        assertNotNull(updated);
-        assertEquals(1L, updated.getId());
-        assertEquals(OrderStatus.DELIVERED, updated.getStatus());
+        Order result = service.updateOrder(1L, orderToUpdate);
+
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        assertEquals(OrderStatus.DELIVERED, result.getStatus());
+        assertEquals("Marcos Vinícios", result.getCustomer().getName());
 
         verify(repository).findById(1L);
         verify(repository).save(any(Order.class));

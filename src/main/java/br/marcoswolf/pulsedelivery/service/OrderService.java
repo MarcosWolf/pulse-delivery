@@ -32,14 +32,12 @@ public class OrderService {
         return repository.save(order);
     }
 
-    public Order updateOrder(Long id, Order updatedDto) {
+    public Order updateOrder(Long id, Order updated) {
         Order existingOrder = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(("Order not found")));
 
-        existingOrder.setCustomerName(updatedDto.getCustomerName());
-        existingOrder.setAddress(updatedDto.getAddress());
-        if (updatedDto.getStatus() != null) {
-            existingOrder.setStatus(updatedDto.getStatus());
+        if (updated.getStatus() != null) {
+            existingOrder.setStatus(updated.getStatus());
         }
 
         return repository.save(existingOrder);
