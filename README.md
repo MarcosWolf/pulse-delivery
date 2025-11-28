@@ -60,3 +60,9 @@ pulsedelivery/
 ├── pom.xml
 └── README.md
 ```
+
+## API REST
+
+A aplicação expõe uma API REST completa para integração com outros sistemas:
+
+- `GET/PUT/POST /orders` – Gerenciamento de pedidos
