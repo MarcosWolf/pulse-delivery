@@ -26,6 +26,7 @@ O PulseDelivery é uma solução backend robusta para empresas e serviços de en
 - <b>Spring Boot:</b> framework principal para a API REST
 - <b>JPA/Hibernate:</b> persistência de dados com ORM
 - <b>PostgreSQL + Docker:</b> banco de dados persistido via container Docker
+- <b>H2 Database:</b> usado em memória apenas para testes
 
 ### Testes
 
@@ -35,6 +36,46 @@ O PulseDelivery é uma solução backend robusta para empresas e serviços de en
 
 ### Containers e Ambiente
 - <b>Docker:</b> orquestração de containers para banco de dados e ambiente isolado
+
+## Executando a Aplicação
+
+1. Clone o repositório:
+
+```bash
+git clone https://github.com/MarcosWolf/pulse-delivery.git
+cd pulse-delivery
+```
+
+2. Certifique-se de que o Docker está rodando.
+   
+3. Suba o banco de dados via Docker Compose:
+```bash
+docker-compose up -d
+```
+
+4. Compile o projeto:
+```bash
+mvn clean install
+```
+
+5. Execute a aplicação:
+```bash
+mvn spring-boot:run
+```
+
+## Executando os Testes
+
+Para rodar todos os testes:
+
+```bash
+mvn test
+```
+
+Para testes específicos:
+
+```bash
+mvn test -Dtest=NomeDaClasse
+```
 
 ## Estrutura do Projeto
 
@@ -66,3 +107,15 @@ pulsedelivery/
 A aplicação expõe uma API REST completa para integração com outros sistemas:
 
 - `GET/PUT/POST /orders` – Gerenciamento de pedidos
+
+### PostgreSQL (via Docker)
+
+1. Certifique-se de que o Docker está rodando.
+2. Acesse o Docker via terminal: `docker exec -it pulsedelivery-postgres bash`
+3. Acesse o PostgreSQL: `psql -h localhost -p 5432 -U pd_user -d pulsedelivery`
+
+- **Container:** pulsedelivery-postgres
+- **Porta:** 5432
+- **Banco:** pulsedelivery
+- **Usuário:** pd_user
+- **Senha:** wolf
