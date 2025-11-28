@@ -15,11 +15,13 @@ import java.time.LocalDateTime;
 public class Order {
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String customerName;
     private String address;
-    private String status;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 
     private LocalDateTime createdAt;
 }
