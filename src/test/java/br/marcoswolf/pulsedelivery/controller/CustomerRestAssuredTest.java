@@ -79,7 +79,7 @@ public class CustomerRestAssuredTest {
     }
 
     @Test
-    void shouldReturnAllCostumers() {
+    void shouldReturnAllCustomers() {
         CustomerDTO customerDTO = createCustomerDTO();
 
         repository.saveAndFlush(mapper.toEntity(customerDTO));
@@ -95,7 +95,7 @@ public class CustomerRestAssuredTest {
     }
 
     @Test
-    void shouldFindCostumerById() {
+    void shouldFindCustomerById() {
         CustomerDTO customerDTO = createCustomerDTO();
 
         Customer savedCustomer = repository.saveAndFlush(mapper.toEntity(customerDTO));
@@ -110,7 +110,7 @@ public class CustomerRestAssuredTest {
     }
 
     @Test
-    void shouldReturn404WhenCostumerNotFound() {
+    void shouldReturn404WhenCustomerNotFound() {
         given()
         .when()
                 .get("/999")
