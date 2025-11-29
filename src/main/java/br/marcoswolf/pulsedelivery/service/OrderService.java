@@ -1,6 +1,7 @@
 package br.marcoswolf.pulsedelivery.service;
 
 import br.marcoswolf.pulsedelivery.dto.OrderDTO;
+import br.marcoswolf.pulsedelivery.dto.OrderUpdateDTO;
 import br.marcoswolf.pulsedelivery.mapper.OrderMapper;
 import br.marcoswolf.pulsedelivery.model.Order;
 import br.marcoswolf.pulsedelivery.model.OrderStatus;
@@ -39,7 +40,7 @@ public class OrderService {
     }
 
     @Transactional
-    public Order updateOrder(Long id, OrderDTO updatedDTO) {
+    public Order updateOrder(Long id, OrderUpdateDTO updatedDTO) {
         Order existingOrder = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(("Order not found")));
 

@@ -1,6 +1,7 @@
 package br.marcoswolf.pulsedelivery.mapper;
 
 import br.marcoswolf.pulsedelivery.dto.CustomerDTO;
+import br.marcoswolf.pulsedelivery.dto.CustomerUpdateDTO;
 import br.marcoswolf.pulsedelivery.model.Customer;
 import org.mapstruct.*;
 
@@ -12,5 +13,5 @@ public interface CustomerMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "address", ignore = true)
-    void updateCustomerFromDTO(CustomerDTO dto, @MappingTarget Customer entity);
+    void updateCustomerFromDTO(CustomerUpdateDTO dto, @MappingTarget Customer entity);
 }

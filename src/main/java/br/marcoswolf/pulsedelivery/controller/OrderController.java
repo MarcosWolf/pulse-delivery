@@ -1,9 +1,11 @@
 package br.marcoswolf.pulsedelivery.controller;
 
 import br.marcoswolf.pulsedelivery.dto.OrderDTO;
+import br.marcoswolf.pulsedelivery.dto.OrderUpdateDTO;
 import br.marcoswolf.pulsedelivery.mapper.OrderMapper;
 import br.marcoswolf.pulsedelivery.model.Order;
 import br.marcoswolf.pulsedelivery.service.OrderService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +24,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO) {
+    public ResponseEntity<OrderDTO> createOrder(@Valid @RequestBody OrderDTO orderDTO) {
         Order order = service.createOrder(orderDTO);
         OrderDTO dto = mapper.toDTO(order);
         return ResponseEntity
@@ -31,7 +33,7 @@ public class OrderController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OrderDTO> updateOrder(@PathVariable Long id, @RequestBody OrderDTO orderDTO) {
+    public ResponseEntity<OrderDTO> updateOrder(@PathVariable Long id, @Valid @RequestBody OrderUpdateDTO orderDTO) {
         Order updatedOrder = service.updateOrder(id, orderDTO);
         return ResponseEntity.ok(mapper.toDTO(updatedOrder));
     }

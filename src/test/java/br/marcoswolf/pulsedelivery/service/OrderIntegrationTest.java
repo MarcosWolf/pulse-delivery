@@ -1,9 +1,6 @@
 package br.marcoswolf.pulsedelivery.service;
 
-import br.marcoswolf.pulsedelivery.dto.AddressDTO;
-import br.marcoswolf.pulsedelivery.dto.CustomerDTO;
-import br.marcoswolf.pulsedelivery.dto.OrderDTO;
-import br.marcoswolf.pulsedelivery.dto.OrderItemDTO;
+import br.marcoswolf.pulsedelivery.dto.*;
 import br.marcoswolf.pulsedelivery.model.Order;
 import br.marcoswolf.pulsedelivery.model.OrderStatus;
 import br.marcoswolf.pulsedelivery.repository.OrderRepository;
@@ -54,12 +51,8 @@ public class OrderIntegrationTest {
 
         Order savedOrder = service.createOrder(orderDTO);
 
-        OrderDTO dtoToUpdate = new OrderDTO(
-                savedOrder.getId(),
-                orderDTO.customer(),
-                OrderStatus.DELIVERED,
-                savedOrder.getCreatedAt(),
-                createOrderItems()
+        OrderUpdateDTO dtoToUpdate = new OrderUpdateDTO(
+                OrderStatus.DELIVERED
         );
 
         Order updated = service.updateOrder(savedOrder.getId(), dtoToUpdate);

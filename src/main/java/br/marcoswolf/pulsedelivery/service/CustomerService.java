@@ -2,6 +2,7 @@ package br.marcoswolf.pulsedelivery.service;
 
 import br.marcoswolf.pulsedelivery.dto.AddressDTO;
 import br.marcoswolf.pulsedelivery.dto.CustomerDTO;
+import br.marcoswolf.pulsedelivery.dto.CustomerUpdateDTO;
 import br.marcoswolf.pulsedelivery.mapper.AddressMapper;
 import br.marcoswolf.pulsedelivery.mapper.CustomerMapper;
 import br.marcoswolf.pulsedelivery.model.Address;
@@ -46,7 +47,7 @@ public class CustomerService {
     }
 
     @Transactional
-    public Customer updateBasicInfo(Long id, CustomerDTO updatedDTO) {
+    public Customer updateBasicInfo(Long id, CustomerUpdateDTO updatedDTO) {
         Customer existingCustomer = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(("Customer not found")));
 

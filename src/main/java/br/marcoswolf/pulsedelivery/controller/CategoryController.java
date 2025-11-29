@@ -4,6 +4,7 @@ import br.marcoswolf.pulsedelivery.dto.CategoryDTO;
 import br.marcoswolf.pulsedelivery.mapper.CategoryMapper;
 import br.marcoswolf.pulsedelivery.model.Category;
 import br.marcoswolf.pulsedelivery.service.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO categoryDTO) {
+    public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
         Category category = service.createCategory(categoryDTO);
         CategoryDTO dto = mapper.toDTO(category);
         return ResponseEntity
@@ -31,7 +32,7 @@ public class CategoryController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long id, @RequestBody CategoryDTO categoryDTO) {
+    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryDTO categoryDTO) {
         Category savedCategory = service.updateCategory(id, categoryDTO);
         return ResponseEntity.ok(mapper.toDTO(savedCategory));
     }

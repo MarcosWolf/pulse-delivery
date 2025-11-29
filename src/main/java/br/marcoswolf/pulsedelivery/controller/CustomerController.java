@@ -2,9 +2,11 @@ package br.marcoswolf.pulsedelivery.controller;
 
 import br.marcoswolf.pulsedelivery.dto.AddressDTO;
 import br.marcoswolf.pulsedelivery.dto.CustomerDTO;
+import br.marcoswolf.pulsedelivery.dto.CustomerUpdateDTO;
 import br.marcoswolf.pulsedelivery.mapper.CustomerMapper;
 import br.marcoswolf.pulsedelivery.model.Customer;
 import br.marcoswolf.pulsedelivery.service.CustomerService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +25,7 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<CustomerDTO> createCustomer(@RequestBody CustomerDTO customerDTO) {
+    public ResponseEntity<CustomerDTO> createCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
         Customer customer = service.createCustomer(customerDTO);
         CustomerDTO dto = mapper.toDTO(customer);
         return ResponseEntity
@@ -34,13 +36,13 @@ public class CustomerController {
     @PatchMapping("/{id}/address")
     public ResponseEntity<CustomerDTO> updateAddress(
             @PathVariable Long id,
-            @RequestBody AddressDTO dto) {
+            @Valid @RequestBody AddressDTO dto) {
         Customer updated = service.updateAddress(id, dto);
         return ResponseEntity.ok(mapper.toDTO(updated));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<CustomerDTO> updateBasicInfo(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
+    public ResponseEntity<CustomerDTO> updateBasicInfo(@PathVariable Long id, @Valid @RequestBody CustomerUpdateDTO customerDTO) {
         Customer savedCustomer = service.updateBasicInfo(id, customerDTO);
         return ResponseEntity.ok(mapper.toDTO(savedCustomer));
     }

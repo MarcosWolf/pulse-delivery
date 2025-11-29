@@ -2,6 +2,7 @@ package br.marcoswolf.pulsedelivery.service;
 
 import br.marcoswolf.pulsedelivery.dto.AddressDTO;
 import br.marcoswolf.pulsedelivery.dto.CustomerDTO;
+import br.marcoswolf.pulsedelivery.dto.CustomerUpdateDTO;
 import br.marcoswolf.pulsedelivery.mapper.AddressMapper;
 import br.marcoswolf.pulsedelivery.mapper.CustomerMapper;
 import br.marcoswolf.pulsedelivery.model.Address;
@@ -86,11 +87,10 @@ public class CustomerUnitTest {
 
         when(repository.findById(1L)).thenReturn(Optional.of(existingCustomer));
 
-        CustomerDTO updateDTO = new CustomerDTO(
+        CustomerUpdateDTO updateDTO = new CustomerUpdateDTO(
                 1L,
                 "João Silva",
-                "joao@gmail.com",
-                null
+                "joao@gmail.com"
         );
 
         doAnswer(invocation -> {

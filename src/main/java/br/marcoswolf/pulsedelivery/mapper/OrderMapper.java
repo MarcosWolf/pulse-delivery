@@ -1,6 +1,7 @@
 package br.marcoswolf.pulsedelivery.mapper;
 
 import br.marcoswolf.pulsedelivery.dto.OrderDTO;
+import br.marcoswolf.pulsedelivery.dto.OrderUpdateDTO;
 import br.marcoswolf.pulsedelivery.model.Order;
 import org.mapstruct.*;
 
@@ -14,5 +15,5 @@ public interface OrderMapper {
     @Mapping(target = "orderItems", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
-    void updateOrderFromDTO(OrderDTO dto, @MappingTarget Order entity);
+    void updateOrderFromDTO(OrderUpdateDTO dto, @MappingTarget Order entity);
 }

@@ -4,6 +4,7 @@ import br.marcoswolf.pulsedelivery.dto.ProductDTO;
 import br.marcoswolf.pulsedelivery.mapper.ProductMapper;
 import br.marcoswolf.pulsedelivery.model.Product;
 import br.marcoswolf.pulsedelivery.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO) {
+    public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductDTO productDTO) {
         Product product = service.createProduct(productDTO);
         ProductDTO dto = mapper.toDTO(product);
         return ResponseEntity
@@ -31,7 +32,7 @@ public class ProductController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody ProductDTO productDTO) {
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @Valid @RequestBody ProductDTO productDTO) {
         Product savedProduct = service.updateProduct(id, productDTO);
         return ResponseEntity.ok(mapper.toDTO(savedProduct));
     }

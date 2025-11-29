@@ -55,10 +55,10 @@ public class CategoryRestAssuredTest {
 
     @Test
     void shouldUpdateCategorySuccessfully() {
-        CategoryDTO dto = new CategoryDTO(null, "Lanches", true);
+        CategoryDTO dto = new CategoryDTO(null, "Lanches", false);
         Category saved = repository.saveAndFlush(mapper.toEntity(dto));
 
-        CategoryDTO updateDTO = new CategoryDTO(null, "Bebidas", null);
+        CategoryDTO updateDTO = new CategoryDTO(null, "Bebidas", true);
 
         given()
                 .contentType(ContentType.JSON)
