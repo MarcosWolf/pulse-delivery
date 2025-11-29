@@ -30,19 +30,35 @@ public class ProductController {
                 .body(dto);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody ProductDTO productDTO) {
         Product savedProduct = service.updateProduct(id, productDTO);
         return ResponseEntity.ok(mapper.toDTO(savedProduct));
     }
 
+    @PatchMapping("/{id}/active")
+    public ResponseEntity<ProductDTO> toggleActive(@PathVariable Long id) {
+        Product product = service.toggleActive(id);
+        return ResponseEntity.ok(mapper.toDTO(product));
+    }
+
     @GetMapping
-    public ResponseEntity<List<ProductDTO>> getAllProducts() {
-        List<Product> products = service.getAllProducts();
-        List<ProductDTO> dtos = products.stream()
-                                    .map(mapper::toDTO)
-                                    .toList();
-        return ResponseEntity.ok(dtos);
+    public ResponseEntity<List<ProductDTO>> getAllProducts(@RequestParam(required = false) Long categoryId, @RequestParam(required = false) Boolean active) {
+            List<Product> products;
+
+            if (categoryId != null) {
+                products = service.getProductsByCategoryId(categoryId);
+            } else if (active != null) {
+                products = service.getActiveProducts();
+            } else {
+                products = service.getAllProducts();
+            }
+
+            List<ProductDTO> dtos = products.stream()
+                    .map(mapper::toDTO)
+                    .toList();
+
+            return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/{id}")
