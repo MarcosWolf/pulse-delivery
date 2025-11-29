@@ -4,6 +4,7 @@ import br.marcoswolf.pulsedelivery.dto.ProductDTO;
 import br.marcoswolf.pulsedelivery.mapper.ProductMapper;
 import br.marcoswolf.pulsedelivery.model.Product;
 import br.marcoswolf.pulsedelivery.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,11 +39,29 @@ public class ProductService {
         return repository.save(existingProduct);
     }
 
+    @Transactional
+    public Product toggleActive(Long id) {
+        Product product = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+
+        product.setActive(!product.getActive());
+
+        return repository.save(product);
+    }
+
     public List<Product> getAllProducts() {
         return repository.findAll();
     }
 
     public Optional<Product> getProductById(Long id) {
         return repository.findById(id);
+    }
+
+    public List<Product> getProductsByCategoryId(Long categoryId) {
+        return repository.findByCategoryId(categoryId);
+    }
+
+    public List<Product> getActiveProducts() {
+        return repository.findByActive(true);
     }
 }
