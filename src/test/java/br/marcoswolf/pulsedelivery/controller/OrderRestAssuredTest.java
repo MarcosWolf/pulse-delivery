@@ -3,6 +3,7 @@ package br.marcoswolf.pulsedelivery.controller;
 import br.marcoswolf.pulsedelivery.dto.AddressDTO;
 import br.marcoswolf.pulsedelivery.dto.CustomerDTO;
 import br.marcoswolf.pulsedelivery.dto.OrderDTO;
+import br.marcoswolf.pulsedelivery.dto.OrderItemDTO;
 import br.marcoswolf.pulsedelivery.mapper.OrderMapper;
 import br.marcoswolf.pulsedelivery.model.Order;
 import br.marcoswolf.pulsedelivery.model.OrderStatus;
@@ -16,7 +17,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
@@ -68,7 +71,8 @@ public class OrderRestAssuredTest {
                 null,
                 null,
                 OrderStatus.DELIVERED,
-                null
+                null,
+                List.of()
         );
 
         given()
@@ -121,6 +125,42 @@ public class OrderRestAssuredTest {
                 .statusCode(404);
     }
 
+    @Test
+    void shouldCreateOrderWithItemsSuccessfully() {
+        OrderDTO orderDTO = createOrderDTO();
+
+        String location = given()
+                .contentType(ContentType.JSON)
+                .body(orderDTO)
+                .when()
+                .post()
+                .then()
+                .statusCode(201)
+                .header("Location", notNullValue())
+                .body("id", notNullValue())
+                .body("customer.name", equalTo("Marcos Vinícios"))
+                .body("orderItems", hasSize(2))
+                .body("orderItems[0].productName", equalTo("Hambúrguer Artesanal"))
+                .body("orderItems[0].quantity", equalTo(2))
+                .body("orderItems[0].price", equalTo(29.90f))
+                .body("orderItems[1].productName", equalTo("Batata Frita"))
+                .body("orderItems[1].quantity", equalTo(1))
+                .body("orderItems[1].price", equalTo(12.50f))
+                .extract()
+                .header("Location");
+
+        String orderId = location.substring(location.lastIndexOf("/") + 1);
+
+        given()
+                .when()
+                .get("/{id}", orderId)
+                .then()
+                .statusCode(200)
+                .body("orderItems", hasSize(2))
+                .body("orderItems[0].productName", equalTo("Hambúrguer Artesanal"))
+                .body("orderItems[1].productName", equalTo("Batata Frita"));
+    }
+
     private AddressDTO createAddressDTO() {
         return new AddressDTO(
                 "Rua Lobo",
@@ -143,12 +183,31 @@ public class OrderRestAssuredTest {
         );
     }
 
+    private List<OrderItemDTO> createOrderItems() {
+        OrderItemDTO item1 = new OrderItemDTO(
+                null,
+                "Hambúrguer Artesanal",
+                2,
+                new BigDecimal("29.90")
+        );
+
+        OrderItemDTO item2 = new OrderItemDTO(
+                null,
+                "Batata Frita",
+                1,
+                new BigDecimal("12.50")
+        );
+
+        return List.of(item1, item2);
+    }
+
     private OrderDTO createOrderDTO() {
         return new OrderDTO(
                 null,
                 createCustomerDTO(),
                 OrderStatus.CREATED,
-                null
+                null,
+                createOrderItems()
         );
     }
 }
