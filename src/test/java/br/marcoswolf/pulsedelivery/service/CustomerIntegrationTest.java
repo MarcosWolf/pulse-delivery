@@ -24,7 +24,6 @@ public class CustomerIntegrationTest {
 
     @Test
     void shouldSaveAndReturnCustomer() {
-        AddressDTO addressDTO = createAddressDTO();
         CustomerDTO customerDTO = createCustomerDTO();
 
         Customer savedCustomer = service.createCustomer(customerDTO);
@@ -43,7 +42,6 @@ public class CustomerIntegrationTest {
 
     @Test
     void shouldUpdateCustomerSucessfully() {
-        AddressDTO addressDTO = createAddressDTO();
         CustomerDTO customerDTO = createCustomerDTO();
 
         Customer savedCustomer = service.createCustomer(customerDTO);

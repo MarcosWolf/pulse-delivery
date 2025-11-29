@@ -3,7 +3,6 @@ package br.marcoswolf.pulsedelivery.service;
 import br.marcoswolf.pulsedelivery.dto.AddressDTO;
 import br.marcoswolf.pulsedelivery.dto.CustomerDTO;
 import br.marcoswolf.pulsedelivery.dto.OrderDTO;
-import br.marcoswolf.pulsedelivery.mapper.OrderMapper;
 import br.marcoswolf.pulsedelivery.model.Order;
 import br.marcoswolf.pulsedelivery.model.OrderStatus;
 import br.marcoswolf.pulsedelivery.repository.OrderRepository;
@@ -27,8 +26,6 @@ public class OrderIntegrationTest {
 
     @Test
     void shouldSaveAndReturnOrder() {
-        AddressDTO addressDTO = createAddressDTO();
-        CustomerDTO customerDTO = createCustomerDTO();
         OrderDTO orderDTO = createOrderDTO();
 
         Order savedOrder = service.createOrder(orderDTO);
@@ -49,8 +46,6 @@ public class OrderIntegrationTest {
 
     @Test
     void shouldUpdateOrderSuccessfully() {
-        AddressDTO addressDTO = createAddressDTO();
-        CustomerDTO customerDTO = createCustomerDTO();
         OrderDTO orderDTO = createOrderDTO();
 
         Order saved = service.createOrder(orderDTO);
