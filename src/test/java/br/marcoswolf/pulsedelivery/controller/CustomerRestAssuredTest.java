@@ -54,28 +54,59 @@ public class CustomerRestAssuredTest {
                 .body("id", notNullValue());
     }
 
-    @Test
-    void shouldUpdateCustomerSuccessfully() {
+    void shouldUpdateCustomerBasicInfoSuccessfully() {
         CustomerDTO customerDTO = createCustomerDTO();
-
         Customer saved = repository.saveAndFlush(mapper.toEntity(customerDTO));
 
         CustomerDTO updateDTO = new CustomerDTO(
                 null,
-                "Marcos Vinícios",
-                "vinicios@gmail.com",
-                null
+                "João Silva",
+                "joao@gmail.com",
+                null  // address null = não será atualizado
         );
 
         given()
                 .contentType(ContentType.JSON)
                 .body(updateDTO)
-        .when()
-                .put("/{id}", saved.getId())
-        .then()
+                .when()
+                .patch("/{id}", saved.getId())  // PATCH ao invés de PUT
+                .then()
                 .statusCode(200)
-                .body("name", equalTo("Marcos Vinícios"))
-                .body("email", equalTo("vinicios@gmail.com"));
+                .body("name", equalTo("João Silva"))
+                .body("email", equalTo("joao@gmail.com"))
+                .body("address.street", equalTo("Rua Lobo"))  // Mantém o address original
+                .body("address.number", equalTo("123"));
+    }
+
+    @Test
+    void shouldUpdateCustomerAddressSuccessfully() {
+        CustomerDTO customerDTO = createCustomerDTO();
+        Customer saved = repository.saveAndFlush(mapper.toEntity(customerDTO));
+
+        AddressDTO newAddress = new AddressDTO(
+                "Avenida Paulista",
+                "1000",
+                "Apto 501",
+                "Bela Vista",
+                "São Paulo",
+                "SP",
+                "01310-100",
+                "Brasil"
+        );
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(newAddress)
+                .when()
+                .patch("/{id}/address", saved.getId())
+                .then()
+                .statusCode(200)
+                .body("name", equalTo("Marcos Vinícios"))  // Nome mantido
+                .body("email", equalTo("viniciosramos.dev@gmail.com"))  // Email mantido
+                .body("address.street", equalTo("Avenida Paulista"))  // Address atualizado
+                .body("address.number", equalTo("1000"))
+                .body("address.complement", equalTo("Apto 501"))
+                .body("address.city", equalTo("São Paulo"));
     }
 
     @Test

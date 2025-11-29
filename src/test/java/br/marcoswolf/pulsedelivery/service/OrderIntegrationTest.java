@@ -52,18 +52,20 @@ public class OrderIntegrationTest {
     void shouldUpdateOrderSuccessfully() {
         OrderDTO orderDTO = createOrderDTO();
 
-        Order saved = service.createOrder(orderDTO);
+        Order savedOrder = service.createOrder(orderDTO);
 
-        Order orderToUpdate = new Order();
-        orderToUpdate.setId(saved.getId());
-        orderToUpdate.setCustomer(saved.getCustomer());
-        orderToUpdate.setStatus(OrderStatus.DELIVERED);
-        orderToUpdate.setCreatedAt(saved.getCreatedAt());
+        OrderDTO dtoToUpdate = new OrderDTO(
+                savedOrder.getId(),
+                orderDTO.customer(),
+                OrderStatus.DELIVERED,
+                savedOrder.getCreatedAt(),
+                createOrderItems()
+        );
 
-        Order updated = service.updateOrder(saved.getId(), orderToUpdate);
+        Order updated = service.updateOrder(savedOrder.getId(), dtoToUpdate);
 
         assertNotNull(updated);
-        assertEquals(saved.getId(), updated.getId());
+        assertEquals(savedOrder.getId(), updated.getId());
         assertEquals(OrderStatus.DELIVERED, updated.getStatus());
         assertEquals("Marcos Vinícios", updated.getCustomer().getName());
 
