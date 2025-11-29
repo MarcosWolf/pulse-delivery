@@ -107,7 +107,7 @@ pulsedelivery/
 
 A aplicação expõe uma API REST completa para integração com outros sistemas:
 
-- `GET/PUT/POST /categories` - Gerenciamento de categorias
+- `GET/PATCH/POST /categories` - Gerenciamento de categorias
 - `GET/PATCH/POST /customers` – Gerenciamento de clientes
 - `GET/PUT/POST /orders` – Gerenciamento de pedidos
 - `GET/PATCH/POST /products` - Gerenciamento de produtos
