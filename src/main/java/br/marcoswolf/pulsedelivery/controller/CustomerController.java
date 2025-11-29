@@ -1,5 +1,6 @@
 package br.marcoswolf.pulsedelivery.controller;
 
+import br.marcoswolf.pulsedelivery.dto.AddressDTO;
 import br.marcoswolf.pulsedelivery.dto.CustomerDTO;
 import br.marcoswolf.pulsedelivery.mapper.CustomerMapper;
 import br.marcoswolf.pulsedelivery.model.Customer;
@@ -30,10 +31,17 @@ public class CustomerController {
                 .body(dto);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
-        Customer updatedEntity = mapper.toEntity(customerDTO);
-        Customer savedCustomer = service.updateCustomer(id, updatedEntity);
+    @PatchMapping("/{id}/address")
+    public ResponseEntity<CustomerDTO> updateAddress(
+            @PathVariable Long id,
+            @RequestBody AddressDTO dto) {
+        Customer updated = service.updateAddress(id, dto);
+        return ResponseEntity.ok(mapper.toDTO(updated));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<CustomerDTO> updateBasicInfo(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
+        Customer savedCustomer = service.updateBasicInfo(id, customerDTO);
         return ResponseEntity.ok(mapper.toDTO(savedCustomer));
     }
 

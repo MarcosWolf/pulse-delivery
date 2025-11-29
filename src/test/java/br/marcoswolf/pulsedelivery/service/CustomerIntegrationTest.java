@@ -41,27 +41,105 @@ public class CustomerIntegrationTest {
     }
 
     @Test
-    void shouldUpdateCustomerSucessfully() {
+    void shouldUpdateBasicInfoSuccessfully() {
         CustomerDTO customerDTO = createCustomerDTO();
-
         Customer savedCustomer = service.createCustomer(customerDTO);
 
-        Customer customerToUpdate = new Customer();
-        customerToUpdate.setId(savedCustomer.getId());
-        customerToUpdate.setName(savedCustomer.getName());
-        customerToUpdate.setEmail("vinicios@gmail.com");
-        customerToUpdate.setAddress(savedCustomer.getAddress());
+        CustomerDTO dtoToUpdate = new CustomerDTO(
+                savedCustomer.getId(),
+                "João Silva",
+                "joao@gmail.com",
+                null
+        );
 
-        Customer updated = service.updateCustomer(savedCustomer.getId(), customerToUpdate);
+        Customer updated = service.updateBasicInfo(savedCustomer.getId(), dtoToUpdate);
 
         assertNotNull(updated);
         assertEquals(savedCustomer.getId(), updated.getId());
-        assertEquals("vinicios@gmail.com", updated.getEmail());
+        assertEquals("João Silva", updated.getName());
+        assertEquals("joao@gmail.com", updated.getEmail());
+
+        assertEquals("Rua Lobo", updated.getAddress().getStreet());
+        assertEquals("123", updated.getAddress().getNumber());
 
         Optional<Customer> foundCustomer = repository.findById(updated.getId());
         assertTrue(foundCustomer.isPresent());
-        assertEquals("vinicios@gmail.com", foundCustomer.get().getEmail());
+        assertEquals("João Silva", foundCustomer.get().getName());
+        assertEquals("joao@gmail.com", foundCustomer.get().getEmail());
+        assertEquals("Rua Lobo", foundCustomer.get().getAddress().getStreet());
     }
+
+    @Test
+    void shouldUpdateAddressSuccessfully() {
+        CustomerDTO customerDTO = createCustomerDTO();
+        Customer savedCustomer = service.createCustomer(customerDTO);
+
+        AddressDTO newAddress = new AddressDTO(
+                "Avenida Paulista",
+                "1000",
+                "Apto 501",
+                "Bela Vista",
+                "São Paulo",
+                "SP",
+                "01310-100",
+                "Brasil"
+        );
+
+        Customer updated = service.updateAddress(savedCustomer.getId(), newAddress);
+
+        assertNotNull(updated);
+        assertEquals(savedCustomer.getId(), updated.getId());
+
+        assertEquals("Marcos Vinícios", updated.getName());
+        assertEquals("viniciosramos.dev@gmail.com", updated.getEmail());
+
+        assertEquals("Avenida Paulista", updated.getAddress().getStreet());
+        assertEquals("1000", updated.getAddress().getNumber());
+        assertEquals("Apto 501", updated.getAddress().getComplement());
+        assertEquals("Bela Vista", updated.getAddress().getNeighborhood());
+
+        Optional<Customer> foundCustomer = repository.findById(updated.getId());
+        assertTrue(foundCustomer.isPresent());
+        assertEquals("Avenida Paulista", foundCustomer.get().getAddress().getStreet());
+        assertEquals("1000", foundCustomer.get().getAddress().getNumber());
+    }
+
+    @Test
+    void shouldUpdateBothBasicInfoAndAddressSeparately() {
+        CustomerDTO customerDTO = createCustomerDTO();
+        Customer savedCustomer = service.createCustomer(customerDTO);
+
+        CustomerDTO basicInfoUpdate = new CustomerDTO(
+                savedCustomer.getId(),
+                "João Silva",
+                "joao@gmail.com",
+                null
+        );
+        Customer afterBasicUpdate = service.updateBasicInfo(savedCustomer.getId(), basicInfoUpdate);
+
+        assertEquals("João Silva", afterBasicUpdate.getName());
+        assertEquals("joao@gmail.com", afterBasicUpdate.getEmail());
+        assertEquals("Rua Lobo", afterBasicUpdate.getAddress().getStreet());  // Mantido
+
+        AddressDTO newAddress = new AddressDTO(
+                "Rua Nova",
+                "999",
+                null,
+                null,
+                "Rio de Janeiro",
+                "RJ",
+                "20000-000",
+                "Brasil"
+        );
+        Customer afterAddressUpdate = service.updateAddress(savedCustomer.getId(), newAddress);
+
+        assertEquals("João Silva", afterAddressUpdate.getName());  // Mantido
+        assertEquals("joao@gmail.com", afterAddressUpdate.getEmail());  // Mantido
+        assertEquals("Rua Nova", afterAddressUpdate.getAddress().getStreet());  // Atualizado
+        assertEquals("999", afterAddressUpdate.getAddress().getNumber());
+        assertEquals("Rio de Janeiro", afterAddressUpdate.getAddress().getCity());
+    }
+
 
     private AddressDTO createAddressDTO() {
         return new AddressDTO(

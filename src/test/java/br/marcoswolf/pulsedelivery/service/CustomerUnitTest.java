@@ -2,6 +2,7 @@ package br.marcoswolf.pulsedelivery.service;
 
 import br.marcoswolf.pulsedelivery.dto.AddressDTO;
 import br.marcoswolf.pulsedelivery.dto.CustomerDTO;
+import br.marcoswolf.pulsedelivery.mapper.AddressMapper;
 import br.marcoswolf.pulsedelivery.mapper.CustomerMapper;
 import br.marcoswolf.pulsedelivery.model.Address;
 import br.marcoswolf.pulsedelivery.model.Customer;
@@ -25,6 +26,9 @@ public class CustomerUnitTest {
 
     @Mock
     private CustomerMapper mapper;
+
+    @Mock
+    private AddressMapper addressMapper;
 
     @InjectMocks
     private CustomerService service;
@@ -72,49 +76,81 @@ public class CustomerUnitTest {
         verify(repository).save(any(Customer.class));
     }
 
-    @Test
-    void shouldUpdateCustomerSuccessfully() {
-        Address address = new Address();
-        address.setStreet("Rua Lobo");
-        address.setNumber("123");
-
-        Address address2 = new Address();
-        address2.setStreet("Rua X");
-        address2.setNumber("456");
-
-        Customer existingCustomer = new Customer();
-        existingCustomer.setId(1L);
-        existingCustomer.setName("Marcos Vinícios");
-        existingCustomer.setEmail("viniciosramos.dev@gmail.com");
-        existingCustomer.setAddress(address);
+    void shouldUpdateBasicInfoSuccessfully() {
+        Customer existingCustomer = new Customer(
+                1L,
+                "Marcos Vinícios",
+                "viniciosramos.dev@gmail.com",
+                new Address("Rua Lobo", "123", null, null, "Cidade X", "SP", "00000-000", "Brasil")
+        );
 
         when(repository.findById(1L)).thenReturn(Optional.of(existingCustomer));
 
-        Customer customerToUpdate = new Customer();
-        customerToUpdate.setId(1L);
-        customerToUpdate.setName("Marcos Vinícios");
-        customerToUpdate.setEmail("vinicios@gmail.com");
-        customerToUpdate.setAddress(address2);
+        CustomerDTO updateDTO = new CustomerDTO(
+                1L,
+                "João Silva",
+                "joao@gmail.com",
+                null
+        );
 
-        Customer updatedCustomer = new Customer();
-        updatedCustomer.setId(1L);
-        updatedCustomer.setName("Marcos Vinícios");
-        updatedCustomer.setEmail("vinicios@gmail.com");
-        updatedCustomer.setAddress(address2);
+        doAnswer(invocation -> {
+            Customer customer = invocation.getArgument(1);
+            customer.setName("João Silva");
+            customer.setEmail("joao@gmail.com");
+            return null;
+        }).when(mapper).updateCustomerFromDTO(updateDTO, existingCustomer);
 
-        when(repository.save(any(Customer.class))).thenReturn(updatedCustomer);
+        when(repository.save(any(Customer.class))).thenReturn(existingCustomer);
 
-        Customer result = service.updateCustomer(1L, customerToUpdate);
+        Customer result = service.updateBasicInfo(1L, updateDTO);
 
         assertNotNull(result);
         assertEquals(1L, result.getId());
-        assertEquals("Marcos Vinícios", result.getName());
-        assertEquals("vinicios@gmail.com", result.getEmail());
-        assertEquals("Rua X", result.getAddress().getStreet());
-        assertEquals("456", result.getAddress().getNumber());
+        assertEquals("João Silva", result.getName());
+        assertEquals("joao@gmail.com", result.getEmail());
+        assertEquals("Rua Lobo", result.getAddress().getStreet());  // Address mantido
 
         verify(repository).findById(1L);
-        verify(repository).save(any(Customer.class));
+        verify(mapper).updateCustomerFromDTO(updateDTO, existingCustomer);
+        verify(repository).save(existingCustomer);
+    }
+
+    @Test
+    void shouldUpdateAddressSuccessfully() {
+        Customer existingCustomer = new Customer(
+                1L,
+                "Marcos Vinícios",
+                "viniciosramos.dev@gmail.com",
+                new Address("Rua Lobo", "123", null, null, "Cidade X", "SP", "00000-000", "Brasil")
+        );
+
+        when(repository.findById(1L)).thenReturn(Optional.of(existingCustomer));
+
+        AddressDTO newAddressDTO = new AddressDTO(
+                "Avenida Paulista", "1000", "Apto 501", "Bela Vista",
+                "São Paulo", "SP", "01310-100", "Brasil"
+        );
+
+        Address newAddress = new Address(
+                "Avenida Paulista", "1000", "Apto 501", "Bela Vista",
+                "São Paulo", "SP", "01310-100", "Brasil"
+        );
+
+        when(addressMapper.toEntity(newAddressDTO)).thenReturn(newAddress);
+        when(repository.save(any(Customer.class))).thenReturn(existingCustomer);
+
+        Customer result = service.updateAddress(1L, newAddressDTO);
+
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        assertEquals("Marcos Vinícios", result.getName());  // Nome mantido
+        assertEquals("viniciosramos.dev@gmail.com", result.getEmail());  // Email mantido
+        assertEquals("Avenida Paulista", result.getAddress().getStreet());  // Address atualizado
+        assertEquals("1000", result.getAddress().getNumber());
+
+        verify(repository).findById(1L);
+        verify(addressMapper).toEntity(newAddressDTO);
+        verify(repository).save(existingCustomer);
     }
 
     @Test

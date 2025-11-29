@@ -32,9 +32,8 @@ public class OrderController {
 
     @PutMapping("/{id}")
     public ResponseEntity<OrderDTO> updateOrder(@PathVariable Long id, @RequestBody OrderDTO orderDTO) {
-        Order updatedEntity = mapper.toEntity(orderDTO);
-        Order savedOrder = service.updateOrder(id, updatedEntity);
-        return ResponseEntity.ok(mapper.toDTO(savedOrder));
+        Order updatedOrder = service.updateOrder(id, orderDTO);
+        return ResponseEntity.ok(mapper.toDTO(updatedOrder));
     }
 
     @GetMapping

@@ -3,11 +3,10 @@ package br.marcoswolf.pulsedelivery.service;
 import br.marcoswolf.pulsedelivery.dto.AddressDTO;
 import br.marcoswolf.pulsedelivery.dto.CustomerDTO;
 import br.marcoswolf.pulsedelivery.dto.OrderDTO;
+import br.marcoswolf.pulsedelivery.mapper.CustomerMapper;
+import br.marcoswolf.pulsedelivery.mapper.OrderItemMapper;
 import br.marcoswolf.pulsedelivery.mapper.OrderMapper;
-import br.marcoswolf.pulsedelivery.model.Address;
-import br.marcoswolf.pulsedelivery.model.Customer;
-import br.marcoswolf.pulsedelivery.model.Order;
-import br.marcoswolf.pulsedelivery.model.OrderStatus;
+import br.marcoswolf.pulsedelivery.model.*;
 import br.marcoswolf.pulsedelivery.repository.OrderRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,6 +28,12 @@ public class OrderUnitTest {
 
     @Mock
     private OrderMapper mapper;
+
+    @Mock
+    private OrderItemMapper itemMapper;
+
+    @Mock
+    private CustomerMapper customerMapper;
 
     @InjectMocks
     private OrderService service;
@@ -88,6 +93,10 @@ public class OrderUnitTest {
         Address address = new Address();
         address.setStreet("Rua Lobo");
         address.setNumber("123");
+        address.setCity("Cidade X");
+        address.setState("SP");
+        address.setPostalCode("00000-000");
+        address.setCountry("Brasil");
 
         Customer customer = new Customer();
         customer.setId(1L);
@@ -103,11 +112,15 @@ public class OrderUnitTest {
 
         when(repository.findById(1L)).thenReturn(Optional.of(existingOrder));
 
-        Order orderToUpdate = new Order();
-        orderToUpdate.setId(1L);
-        orderToUpdate.setCustomer(customer);
-        orderToUpdate.setStatus(OrderStatus.DELIVERED);
-        orderToUpdate.setCreatedAt(existingOrder.getCreatedAt());
+        AddressDTO addressDTO = new AddressDTO("Rua Lobo", "123", null, null, "Cidade X", "SP", "00000-000", "Brasil");
+        CustomerDTO customerDTO = new CustomerDTO(1L, "Marcos Vinícios", "viniciosramos.dev@gmail.com", addressDTO);
+        OrderDTO updateDTO = new OrderDTO(
+                1L,
+                customerDTO,
+                OrderStatus.DELIVERED,
+                existingOrder.getCreatedAt(),
+                List.of()
+        );
 
         Order updatedOrder = new Order();
         updatedOrder.setId(1L);
@@ -117,7 +130,7 @@ public class OrderUnitTest {
 
         when(repository.save(any(Order.class))).thenReturn(updatedOrder);
 
-        Order result = service.updateOrder(1L, orderToUpdate);
+        Order result = service.updateOrder(1L, updateDTO);
 
         assertNotNull(result);
         assertEquals(1L, result.getId());

@@ -1,9 +1,13 @@
 package br.marcoswolf.pulsedelivery.service;
 
+import br.marcoswolf.pulsedelivery.dto.AddressDTO;
 import br.marcoswolf.pulsedelivery.dto.CustomerDTO;
+import br.marcoswolf.pulsedelivery.mapper.AddressMapper;
 import br.marcoswolf.pulsedelivery.mapper.CustomerMapper;
+import br.marcoswolf.pulsedelivery.model.Address;
 import br.marcoswolf.pulsedelivery.model.Customer;
 import br.marcoswolf.pulsedelivery.repository.CustomerRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,10 +17,12 @@ import java.util.Optional;
 public class CustomerService {
     private final CustomerRepository repository;
     private final CustomerMapper mapper;
+    private final AddressMapper addressMapper;
 
-    public CustomerService(CustomerRepository repository, CustomerMapper mapper) {
+    public CustomerService(CustomerRepository repository, CustomerMapper mapper, AddressMapper addressMapper) {
         this.repository = repository;
         this.mapper = mapper;
+        this.addressMapper = addressMapper;
     }
 
     public Customer createCustomer(CustomerDTO customerDTO) {
@@ -28,13 +34,23 @@ public class CustomerService {
         return repository.save(customer);
     }
 
-    public Customer updateCustomer(Long id, Customer updated) {
+    @Transactional
+    public Customer updateAddress(Long id, AddressDTO updatedDTO) {
+        Customer existingCustomer = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Customer not found"));
+
+        Address newAddress = addressMapper.toEntity(updatedDTO);
+        existingCustomer.setAddress(newAddress);
+
+        return repository.save(existingCustomer);
+    }
+
+    @Transactional
+    public Customer updateBasicInfo(Long id, CustomerDTO updatedDTO) {
         Customer existingCustomer = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(("Customer not found")));
 
-        existingCustomer.setName(updated.getName());
-        existingCustomer.setEmail(updated.getEmail());
-        existingCustomer.setAddress(updated.getAddress());
+        mapper.updateCustomerFromDTO(updatedDTO, existingCustomer);
 
         return repository.save(existingCustomer);
     }

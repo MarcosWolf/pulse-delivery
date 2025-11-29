@@ -5,6 +5,7 @@ import br.marcoswolf.pulsedelivery.mapper.OrderMapper;
 import br.marcoswolf.pulsedelivery.model.Order;
 import br.marcoswolf.pulsedelivery.model.OrderStatus;
 import br.marcoswolf.pulsedelivery.repository.OrderRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -37,13 +38,12 @@ public class OrderService {
         return repository.save(order);
     }
 
-    public Order updateOrder(Long id, Order updated) {
+    @Transactional
+    public Order updateOrder(Long id, OrderDTO updatedDTO) {
         Order existingOrder = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(("Order not found")));
 
-        if (updated.getStatus() != null) {
-            existingOrder.setStatus(updated.getStatus());
-        }
+        mapper.updateOrderFromDTO(updatedDTO, existingOrder);
 
         return repository.save(existingOrder);
     }
