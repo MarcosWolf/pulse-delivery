@@ -29,6 +29,11 @@ public class OrderService {
         Order order = mapper.toEntity(orderDTO);
         order.setStatus(OrderStatus.CREATED);
         order.setCreatedAt(LocalDateTime.now());
+
+        if (order.getOrderItems() != null) {
+            order.getOrderItems().forEach(item -> item.setOrder(order));
+        }
+
         return repository.save(order);
     }
 

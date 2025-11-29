@@ -11,12 +11,12 @@ import br.marcoswolf.pulsedelivery.model.OrderStatus;
 import br.marcoswolf.pulsedelivery.repository.OrderRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,7 +41,7 @@ public class OrderUnitTest {
         CustomerDTO customerDTO = new CustomerDTO(
                 null, "Marcos Vinícios", "viniciosramos.dev@gmail.com", addressDTO
         );
-        OrderDTO orderDTO = new OrderDTO(null, customerDTO, OrderStatus.CREATED, null);
+        OrderDTO orderDTO = new OrderDTO(null, customerDTO, OrderStatus.CREATED, null, null);
 
         Address address = new Address();
         address.setStreet("Rua Lobo");
@@ -155,5 +155,15 @@ public class OrderUnitTest {
 
         assertTrue(result.isEmpty());
         verify(repository).findById(2L);
+    }
+
+    @Test
+    void shouldReturnListOfOrders() {
+        when(repository.findAll()).thenReturn(List.of(new Order(), new Order()));
+
+        List<Order> result = service.getAllOrders();
+
+        assertEquals(2, result.size());
+        verify(repository).findAll();
     }
 }
