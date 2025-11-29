@@ -38,6 +38,15 @@ public class CategoryService {
         return repository.save(existingCategory);
     }
 
+    public Category toggleActive(Long id) {
+        Category category = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+
+        category.setActive(!category.getActive());
+
+        return repository.save(category);
+    }
+
     public List<Category> getAllCategories() {
         return repository.findAll();
     }

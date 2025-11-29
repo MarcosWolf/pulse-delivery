@@ -30,10 +30,16 @@ public class CategoryController {
                 .body(dto);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long id, @RequestBody CategoryDTO categoryDTO) {
         Category savedCategory = service.updateCategory(id, categoryDTO);
         return ResponseEntity.ok(mapper.toDTO(savedCategory));
+    }
+
+    @PatchMapping("/{id}/active")
+    public ResponseEntity<CategoryDTO> toggleActive(@PathVariable Long id) {
+        Category updated = service.toggleActive(id);
+        return ResponseEntity.ok(mapper.toDTO(updated));
     }
 
     @GetMapping

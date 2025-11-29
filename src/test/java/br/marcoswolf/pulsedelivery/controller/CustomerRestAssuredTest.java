@@ -54,6 +54,7 @@ public class CustomerRestAssuredTest {
                 .body("id", notNullValue());
     }
 
+    @Test
     void shouldUpdateCustomerBasicInfoSuccessfully() {
         CustomerDTO customerDTO = createCustomerDTO();
         Customer saved = repository.saveAndFlush(mapper.toEntity(customerDTO));
