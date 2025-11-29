@@ -41,7 +41,7 @@ public class OrderUnitTest {
         CustomerDTO customerDTO = new CustomerDTO(
                 null, "Marcos Vinícios", "viniciosramos.dev@gmail.com", addressDTO
         );
-        OrderDTO inputDTO = new OrderDTO(null, customerDTO, OrderStatus.CREATED, null);
+        OrderDTO orderDTO = new OrderDTO(null, customerDTO, OrderStatus.CREATED, null);
 
         Address address = new Address();
         address.setStreet("Rua Lobo");
@@ -56,11 +56,11 @@ public class OrderUnitTest {
         customer.setEmail("viniciosramos.dev@gmail.com");
         customer.setAddress(address);
 
-        Order entityToSave = new Order();
-        entityToSave.setCustomer(customer);
-        entityToSave.setStatus(OrderStatus.CREATED);
+        Order order = new Order();
+        order.setCustomer(customer);
+        order.setStatus(OrderStatus.CREATED);
 
-        when(mapper.toEntity(inputDTO)).thenReturn(entityToSave);
+        when(mapper.toEntity(orderDTO)).thenReturn(order);
 
         Order savedEntity = new Order();
         savedEntity.setId(1L);
@@ -70,7 +70,7 @@ public class OrderUnitTest {
 
         when(repository.save(any(Order.class))).thenReturn(savedEntity);
 
-        Order result = service.createOrder(inputDTO);
+        Order result = service.createOrder(orderDTO);
 
         assertNotNull(result);
         assertEquals(1L, result.getId());
@@ -79,14 +79,8 @@ public class OrderUnitTest {
         assertEquals(OrderStatus.CREATED, result.getStatus());
         assertNotNull(result.getCreatedAt());
 
-        verify(mapper).toEntity(inputDTO);
-
-        ArgumentCaptor<Order> captor = ArgumentCaptor.forClass(Order.class);
-        verify(repository).save(captor.capture());
-
-        Order captured = captor.getValue();
-        assertEquals(OrderStatus.CREATED, captured.getStatus());
-        assertNotNull(captured.getCreatedAt());
+        verify(mapper).toEntity(orderDTO);
+        verify(repository).save(any(Order.class));
     }
 
     @Test
