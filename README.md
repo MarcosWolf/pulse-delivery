@@ -25,6 +25,7 @@ O PulseDelivery é uma solução backend robusta para empresas e serviços de en
 
 - <b>Spring Boot:</b> framework principal para a API REST
 - <b>JPA/Hibernate:</b> persistência de dados com ORM
+- <b>MapStruct:</b> mapeamento automático entre DTOs e entidades
 - <b>PostgreSQL + Docker:</b> banco de dados persistido via container Docker
 - <b>H2 Database:</b> usado em memória apenas para testes
 

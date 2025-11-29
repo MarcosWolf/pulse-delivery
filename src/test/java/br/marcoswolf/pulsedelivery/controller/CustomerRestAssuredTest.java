@@ -2,11 +2,9 @@ package br.marcoswolf.pulsedelivery.controller;
 
 import br.marcoswolf.pulsedelivery.dto.AddressDTO;
 import br.marcoswolf.pulsedelivery.dto.CustomerDTO;
-import br.marcoswolf.pulsedelivery.dto.OrderDTO;
-import br.marcoswolf.pulsedelivery.mapper.OrderMapper;
-import br.marcoswolf.pulsedelivery.model.Order;
-import br.marcoswolf.pulsedelivery.model.OrderStatus;
-import br.marcoswolf.pulsedelivery.repository.OrderRepository;
+import br.marcoswolf.pulsedelivery.mapper.CustomerMapper;
+import br.marcoswolf.pulsedelivery.model.Customer;
+import br.marcoswolf.pulsedelivery.repository.CustomerRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,58 +14,56 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.time.LocalDateTime;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class OrderRestAssuredTest {
+public class CustomerRestAssuredTest {
     @LocalServerPort
     private int port;
 
     @Autowired
-    private OrderRepository repository;
+    private CustomerRepository repository;
 
     @Autowired
-    private OrderMapper mapper;
+    private CustomerMapper mapper;
 
     @BeforeEach
     void setup() {
         RestAssured.port = port;
-        RestAssured.basePath = "/orders";
+        RestAssured.basePath = "/customers";
 
         repository.deleteAll();
     }
 
     @Test
-    void shouldCreateOrderSuccessfully() {
-        OrderDTO orderDTO = createOrderDTO();
+    void shouldCreateCustomerSuccessfully() {
+        CustomerDTO customerDTO = createCustomerDTO();
 
         given()
                 .contentType(ContentType.JSON)
-                .body(orderDTO)
+                .body(customerDTO)
         .when()
                 .post()
         .then()
                 .statusCode(201)
                 .header("Location", notNullValue())
-                .header("Location", matchesPattern(".*/orders/\\d+"))
-                .body("customer.name", equalTo("Marcos Vinícios"))
+                .header("Location", matchesPattern(".*/customers/\\d+"))
+                .body("name", equalTo("Marcos Vinícios"))
                 .body("id", notNullValue());
     }
 
     @Test
-    void shouldUpdateOrderSuccessfully() {
-        OrderDTO orderDTO = createOrderDTO();
+    void shouldUpdateCustomerSuccessfully() {
+        CustomerDTO customerDTO = createCustomerDTO();
 
-        Order saved = repository.saveAndFlush(mapper.toEntity(orderDTO));
+        Customer saved = repository.saveAndFlush(mapper.toEntity(customerDTO));
 
-        OrderDTO updateDTO = new OrderDTO(
+        CustomerDTO updateDTO = new CustomerDTO(
                 null,
-                null,
-                OrderStatus.DELIVERED,
+                "Marcos Vinícios",
+                "vinicios@gmail.com",
                 null
         );
 
@@ -78,15 +74,15 @@ public class OrderRestAssuredTest {
                 .put("/{id}", saved.getId())
         .then()
                 .statusCode(200)
-                .body("customer.name", equalTo("Marcos Vinícios"))
-                .body("status", equalTo("DELIVERED"));
+                .body("name", equalTo("Marcos Vinícios"))
+                .body("email", equalTo("vinicios@gmail.com"));
     }
 
     @Test
-    void shouldReturnAllOrders() {
-        OrderDTO orderDTO = createOrderDTO();
+    void shouldReturnAllCostumers() {
+        CustomerDTO customerDTO = createCustomerDTO();
 
-        repository.saveAndFlush(mapper.toEntity(orderDTO));
+        repository.saveAndFlush(mapper.toEntity(customerDTO));
 
         given()
         .when()
@@ -94,26 +90,27 @@ public class OrderRestAssuredTest {
         .then()
                 .statusCode(200)
                 .body("$", hasSize(1))
-                .body("[0].customer.name", equalTo("Marcos Vinícios"));
+                .body("[0].name", equalTo("Marcos Vinícios"));
+
     }
 
     @Test
-    void shouldFindOrderbyId() {
-        OrderDTO orderDTO = createOrderDTO();
+    void shouldFindCostumerById() {
+        CustomerDTO customerDTO = createCustomerDTO();
 
-        Order savedOrder = repository.saveAndFlush(mapper.toEntity(orderDTO));
+        Customer savedCustomer = repository.saveAndFlush(mapper.toEntity(customerDTO));
 
         given()
         .when()
-                .get("{id}", savedOrder.getId())
+                .get("{id}", savedCustomer.getId())
         .then()
                 .statusCode(200)
-                .body("id", equalTo(savedOrder.getId().intValue()))
-                .body("customer.name", equalTo("Marcos Vinícios"));
+                .body("id", equalTo(savedCustomer.getId().intValue()))
+                .body("name", equalTo("Marcos Vinícios"));
     }
 
     @Test
-    void shouldReturn404WhenOrderNotFound() {
+    void shouldReturn404WhenCostumerNotFound() {
         given()
         .when()
                 .get("/999")
@@ -140,15 +137,6 @@ public class OrderRestAssuredTest {
                 "Marcos Vinícios",
                 "viniciosramos.dev@gmail.com",
                 createAddressDTO()
-        );
-    }
-
-    private OrderDTO createOrderDTO() {
-        return new OrderDTO(
-                null,
-                createCustomerDTO(),
-                OrderStatus.CREATED,
-                null
         );
     }
 }
