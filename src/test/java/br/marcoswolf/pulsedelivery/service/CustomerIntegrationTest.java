@@ -2,6 +2,7 @@ package br.marcoswolf.pulsedelivery.service;
 
 import br.marcoswolf.pulsedelivery.dto.AddressDTO;
 import br.marcoswolf.pulsedelivery.dto.CustomerDTO;
+import br.marcoswolf.pulsedelivery.dto.CustomerUpdateDTO;
 import br.marcoswolf.pulsedelivery.model.Customer;
 import br.marcoswolf.pulsedelivery.repository.CustomerRepository;
 import org.junit.jupiter.api.Test;
@@ -45,11 +46,10 @@ public class CustomerIntegrationTest {
         CustomerDTO customerDTO = createCustomerDTO();
         Customer savedCustomer = service.createCustomer(customerDTO);
 
-        CustomerDTO dtoToUpdate = new CustomerDTO(
+        CustomerUpdateDTO dtoToUpdate = new CustomerUpdateDTO(
                 savedCustomer.getId(),
                 "João Silva",
-                "joao@gmail.com",
-                null
+                "joao@gmail.com"
         );
 
         Customer updated = service.updateBasicInfo(savedCustomer.getId(), dtoToUpdate);
@@ -109,17 +109,16 @@ public class CustomerIntegrationTest {
         CustomerDTO customerDTO = createCustomerDTO();
         Customer savedCustomer = service.createCustomer(customerDTO);
 
-        CustomerDTO basicInfoUpdate = new CustomerDTO(
+        CustomerUpdateDTO basicInfoUpdate = new CustomerUpdateDTO(
                 savedCustomer.getId(),
                 "João Silva",
-                "joao@gmail.com",
-                null
+                "joao@gmail.com"
         );
         Customer afterBasicUpdate = service.updateBasicInfo(savedCustomer.getId(), basicInfoUpdate);
 
         assertEquals("João Silva", afterBasicUpdate.getName());
         assertEquals("joao@gmail.com", afterBasicUpdate.getEmail());
-        assertEquals("Rua Lobo", afterBasicUpdate.getAddress().getStreet());  // Mantido
+        assertEquals("Rua Lobo", afterBasicUpdate.getAddress().getStreet());
 
         AddressDTO newAddress = new AddressDTO(
                 "Rua Nova",
@@ -133,9 +132,9 @@ public class CustomerIntegrationTest {
         );
         Customer afterAddressUpdate = service.updateAddress(savedCustomer.getId(), newAddress);
 
-        assertEquals("João Silva", afterAddressUpdate.getName());  // Mantido
-        assertEquals("joao@gmail.com", afterAddressUpdate.getEmail());  // Mantido
-        assertEquals("Rua Nova", afterAddressUpdate.getAddress().getStreet());  // Atualizado
+        assertEquals("João Silva", afterAddressUpdate.getName());
+        assertEquals("joao@gmail.com", afterAddressUpdate.getEmail());
+        assertEquals("Rua Nova", afterAddressUpdate.getAddress().getStreet());
         assertEquals("999", afterAddressUpdate.getAddress().getNumber());
         assertEquals("Rio de Janeiro", afterAddressUpdate.getAddress().getCity());
     }
@@ -146,7 +145,7 @@ public class CustomerIntegrationTest {
                 "Rua Lobo",
                 "123",
                 null,
-                null,
+                "Bela Vista",
                 "Cidade X",
                 "São Paulo",
                 "00000-000",
@@ -160,6 +159,14 @@ public class CustomerIntegrationTest {
                 "Marcos Vinícios",
                 "viniciosramos.dev@gmail.com",
                 createAddressDTO()
+        );
+    }
+
+    private CustomerUpdateDTO createCustomerUpdateDTO() {
+        return new CustomerUpdateDTO(
+                null,
+                "Marcos Vinícios",
+                "viniciosramos.dev@gmail.com"
         );
     }
 }

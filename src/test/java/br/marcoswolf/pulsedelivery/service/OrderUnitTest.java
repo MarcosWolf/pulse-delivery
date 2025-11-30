@@ -3,6 +3,7 @@ package br.marcoswolf.pulsedelivery.service;
 import br.marcoswolf.pulsedelivery.dto.AddressDTO;
 import br.marcoswolf.pulsedelivery.dto.CustomerDTO;
 import br.marcoswolf.pulsedelivery.dto.OrderDTO;
+import br.marcoswolf.pulsedelivery.dto.OrderUpdateDTO;
 import br.marcoswolf.pulsedelivery.mapper.CustomerMapper;
 import br.marcoswolf.pulsedelivery.mapper.OrderItemMapper;
 import br.marcoswolf.pulsedelivery.mapper.OrderMapper;
@@ -114,12 +115,8 @@ public class OrderUnitTest {
 
         AddressDTO addressDTO = new AddressDTO("Rua Lobo", "123", null, null, "Cidade X", "SP", "00000-000", "Brasil");
         CustomerDTO customerDTO = new CustomerDTO(1L, "Marcos Vinícios", "viniciosramos.dev@gmail.com", addressDTO);
-        OrderDTO updateDTO = new OrderDTO(
-                1L,
-                customerDTO,
-                OrderStatus.DELIVERED,
-                existingOrder.getCreatedAt(),
-                List.of()
+        OrderUpdateDTO updateDTO = new OrderUpdateDTO(
+                OrderStatus.DELIVERED
         );
 
         Order updatedOrder = new Order();

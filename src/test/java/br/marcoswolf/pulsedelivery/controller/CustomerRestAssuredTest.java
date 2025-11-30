@@ -2,6 +2,7 @@ package br.marcoswolf.pulsedelivery.controller;
 
 import br.marcoswolf.pulsedelivery.dto.AddressDTO;
 import br.marcoswolf.pulsedelivery.dto.CustomerDTO;
+import br.marcoswolf.pulsedelivery.dto.CustomerUpdateDTO;
 import br.marcoswolf.pulsedelivery.mapper.CustomerMapper;
 import br.marcoswolf.pulsedelivery.model.Customer;
 import br.marcoswolf.pulsedelivery.repository.CustomerRepository;
@@ -59,23 +60,22 @@ public class CustomerRestAssuredTest {
         CustomerDTO customerDTO = createCustomerDTO();
         Customer saved = repository.saveAndFlush(mapper.toEntity(customerDTO));
 
-        CustomerDTO updateDTO = new CustomerDTO(
+        CustomerUpdateDTO updateDTO = new CustomerUpdateDTO(
                 null,
                 "João Silva",
-                "joao@gmail.com",
-                null  // address null = não será atualizado
+                "joao@gmail.com"
         );
 
         given()
                 .contentType(ContentType.JSON)
                 .body(updateDTO)
                 .when()
-                .patch("/{id}", saved.getId())  // PATCH ao invés de PUT
+                .patch("/{id}", saved.getId())
                 .then()
                 .statusCode(200)
                 .body("name", equalTo("João Silva"))
                 .body("email", equalTo("joao@gmail.com"))
-                .body("address.street", equalTo("Rua Lobo"))  // Mantém o address original
+                .body("address.street", equalTo("Rua Lobo"))
                 .body("address.number", equalTo("123"));
     }
 
@@ -102,9 +102,9 @@ public class CustomerRestAssuredTest {
                 .patch("/{id}/address", saved.getId())
                 .then()
                 .statusCode(200)
-                .body("name", equalTo("Marcos Vinícios"))  // Nome mantido
-                .body("email", equalTo("viniciosramos.dev@gmail.com"))  // Email mantido
-                .body("address.street", equalTo("Avenida Paulista"))  // Address atualizado
+                .body("name", equalTo("Marcos Vinícios"))
+                .body("email", equalTo("viniciosramos.dev@gmail.com"))
+                .body("address.street", equalTo("Avenida Paulista"))
                 .body("address.number", equalTo("1000"))
                 .body("address.complement", equalTo("Apto 501"))
                 .body("address.city", equalTo("São Paulo"));
@@ -169,6 +169,14 @@ public class CustomerRestAssuredTest {
                 "Marcos Vinícios",
                 "viniciosramos.dev@gmail.com",
                 createAddressDTO()
+        );
+    }
+
+    private CustomerUpdateDTO createCustomerUpdateDTO() {
+        return new CustomerUpdateDTO(
+                null,
+                "Marcos Vinícios",
+                "viniciosramos.dev@gmail.com"
         );
     }
 }
