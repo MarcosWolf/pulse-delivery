@@ -112,6 +112,14 @@ A aplicação expõe uma API REST completa para integração com outros sistemas
 - `GET/PUT/POST /orders` – Gerenciamento de pedidos
 - `GET/PATCH/POST /products` - Gerenciamento de produtos
 
+### Documentação da API (Swagger)
+
+Para acessar a documentação interativa da API:
+
+1. Certifique-se que a aplicação está rodando.
+2. Abra o navegador em: `http://localhost:8080/swagger-ui.html`
+3. Explore os endpoints, veja modelos de request/response e teste chamadas diretamente pelo Swagger.
+
 ### PostgreSQL (via Docker)
 
 1. Certifique-se de que o Docker está rodando.
