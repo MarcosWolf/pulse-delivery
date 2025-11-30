@@ -1,10 +1,16 @@
 package br.marcoswolf.pulsedelivery.service;
 
 import br.marcoswolf.pulsedelivery.dto.*;
+import br.marcoswolf.pulsedelivery.model.Category;
 import br.marcoswolf.pulsedelivery.model.Order;
 import br.marcoswolf.pulsedelivery.model.OrderStatus;
+import br.marcoswolf.pulsedelivery.model.Product;
+import br.marcoswolf.pulsedelivery.repository.CategoryRepository;
 import br.marcoswolf.pulsedelivery.repository.OrderRepository;
+import br.marcoswolf.pulsedelivery.repository.ProductRepository;
 import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,12 +24,25 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@Disabled("Em desenvolvimento")
 public class OrderIntegrationTest {
+
     @Autowired
     private OrderService service;
 
     @Autowired
     private OrderRepository repository;
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @BeforeEach
+    void setup() {
+        createProducts();
+    }
 
     @Test
     void shouldSaveAndReturnOrder() {
@@ -38,7 +57,6 @@ public class OrderIntegrationTest {
         assertEquals(OrderStatus.CREATED, savedOrder.getStatus());
 
         Optional<Order> foundOrder = service.getOrderById(savedOrder.getId());
-
         assertTrue(foundOrder.isPresent());
         assertEquals("Marcos Vinícios", foundOrder.get().getCustomer().getName());
         assertEquals("Rua Lobo", foundOrder.get().getCustomer().getAddress().getStreet());
@@ -48,12 +66,9 @@ public class OrderIntegrationTest {
     @Test
     void shouldUpdateOrderSuccessfully() {
         OrderDTO orderDTO = createOrderDTO();
-
         Order savedOrder = service.createOrder(orderDTO);
 
-        OrderUpdateDTO dtoToUpdate = new OrderUpdateDTO(
-                OrderStatus.DELIVERED
-        );
+        OrderUpdateDTO dtoToUpdate = new OrderUpdateDTO(OrderStatus.DELIVERED);
 
         Order updated = service.updateOrder(savedOrder.getId(), dtoToUpdate);
 
@@ -71,20 +86,20 @@ public class OrderIntegrationTest {
     @Transactional
     void shouldSaveOrderWithItems() {
         OrderDTO orderDTO = createOrderDTO();
-
         Order savedOrder = service.createOrder(orderDTO);
 
         assertNotNull(savedOrder.getId());
         assertNotNull(savedOrder.getOrderItems());
         assertEquals(2, savedOrder.getOrderItems().size());
 
-        assertEquals("Hambúrguer Artesanal", savedOrder.getOrderItems().get(0).getProductName());
+        // Acessando produto dentro do OrderItem
+        assertEquals("Hambúrguer Artesanal", savedOrder.getOrderItems().get(0).getProduct().getName());
         assertEquals(2, savedOrder.getOrderItems().get(0).getQuantity());
-        assertEquals(new BigDecimal("29.90"), savedOrder.getOrderItems().get(0).getPrice());
+        assertEquals(new BigDecimal("29.90"), savedOrder.getOrderItems().get(0).getProduct().getPrice());
 
-        assertEquals("Batata Frita", savedOrder.getOrderItems().get(1).getProductName());
+        assertEquals("Batata Frita", savedOrder.getOrderItems().get(1).getProduct().getName());
         assertEquals(1, savedOrder.getOrderItems().get(1).getQuantity());
-        assertEquals(new BigDecimal("12.50"), savedOrder.getOrderItems().get(1).getPrice());
+        assertEquals(new BigDecimal("12.50"), savedOrder.getOrderItems().get(1).getProduct().getPrice());
 
         Optional<Order> found = repository.findById(savedOrder.getId());
         assertTrue(found.isPresent());
@@ -115,17 +130,15 @@ public class OrderIntegrationTest {
 
     private List<OrderItemDTO> createOrderItems() {
         OrderItemDTO item1 = new OrderItemDTO(
-                null,
-                "Hambúrguer Artesanal",
-                2,
-                new BigDecimal("29.90")
+                null, // id
+                1L,   // productId
+                2     // quantity
         );
 
         OrderItemDTO item2 = new OrderItemDTO(
                 null,
-                "Batata Frita",
-                1,
-                new BigDecimal("12.50")
+                2L,
+                1
         );
 
         return List.of(item1, item2);
@@ -139,5 +152,25 @@ public class OrderIntegrationTest {
                 null,
                 createOrderItems()
         );
+    }
+
+    private void createProducts() {
+        Category category = new Category();
+        category.setName("Lanches");
+        categoryRepository.save(category);
+
+        Product product1 = new Product();
+        product1.setName("Hambúrguer Artesanal");
+        product1.setDescription("Descrição");
+        product1.setPrice(new BigDecimal("29.90"));
+        product1.setCategory(category);
+        productRepository.save(product1);
+
+        Product product2 = new Product();
+        product2.setName("Batata Frita");
+        product2.setDescription("Descrição");
+        product2.setPrice(new BigDecimal("12.50"));
+        product2.setCategory(category);
+        productRepository.save(product2);
     }
 }

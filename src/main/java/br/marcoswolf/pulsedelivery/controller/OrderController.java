@@ -28,11 +28,12 @@ import java.util.List;
 public class OrderController {
     private final OrderService service;
     private final OrderMapper mapper;
-    private KafkaEventProducer kafkaEventProducer;
+    private final KafkaEventProducer kafkaEventProducer;
 
-    public OrderController(OrderService service, OrderMapper mapper) {
+    public OrderController(OrderService service, OrderMapper mapper, KafkaEventProducer kafkaEventProducer) {
         this.service = service;
         this.mapper = mapper;
+        this.kafkaEventProducer = kafkaEventProducer;
     }
 
     @PostMapping
@@ -63,14 +64,20 @@ public class OrderController {
         Order order = service.createOrder(orderDTO);
         OrderDTO dto = mapper.toDTO(order);
 
-        OrderCreatedEventDTO event = new OrderCreatedEventDTO(
-                order.getId(),
-                order.getCustomer().getId(),
-                order.getCustomer().getName(),
-                order.getCustomer().getAddress().getStreet(),
-                order.getCreatedAt()
-        );
-        kafkaEventProducer.sendOrderCreatedEvent(event);
+//        if (kafkaEventProducer != null) {
+//            String street = (order.getCustomer() != null && order.getCustomer().getAddress() != null)
+//                    ? order.getCustomer().getAddress().getStreet()
+//                    : null;
+//
+//            OrderCreatedEventDTO event = new OrderCreatedEventDTO(
+//                    order.getId(),
+//                    order.getCustomer().getId(),
+//                    order.getCustomer().getName(),
+//                    street,
+//                    order.getCreatedAt()
+//            );
+//            kafkaEventProducer.sendOrderCreatedEvent(event);
+//        }
 
         return ResponseEntity
                 .created(URI.create("/orders/" + order.getId()))

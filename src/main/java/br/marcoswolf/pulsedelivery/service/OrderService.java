@@ -23,6 +23,7 @@ public class OrderService {
         this.mapper = mapper;
     }
 
+    @Transactional
     public Order createOrder(OrderDTO orderDTO) {
         if (orderDTO == null) {
             throw new IllegalArgumentException("Order cannot be null");
@@ -31,10 +32,6 @@ public class OrderService {
         Order order = mapper.toEntity(orderDTO);
         order.setStatus(OrderStatus.CREATED);
         order.setCreatedAt(LocalDateTime.now());
-
-        if (order.getOrderItems() != null) {
-            order.getOrderItems().forEach(item -> item.setOrder(order));
-        }
 
         return repository.save(order);
     }

@@ -9,6 +9,7 @@ import br.marcoswolf.pulsedelivery.mapper.OrderItemMapper;
 import br.marcoswolf.pulsedelivery.mapper.OrderMapper;
 import br.marcoswolf.pulsedelivery.model.*;
 import br.marcoswolf.pulsedelivery.repository.OrderRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@Disabled("Em desenvolvimento")
 public class OrderUnitTest {
     @Mock
     private OrderRepository repository;

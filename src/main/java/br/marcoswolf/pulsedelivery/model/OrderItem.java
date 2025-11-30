@@ -16,15 +16,17 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String productName;
     private Integer quantity;
-    private BigDecimal price;
 
-    public BigDecimal getTotal() {
-        return price.multiply(BigDecimal.valueOf(quantity));
-    }
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
+
+    public BigDecimal getTotal() {
+        return product.getPrice().multiply(BigDecimal.valueOf(quantity));
+    }
 }

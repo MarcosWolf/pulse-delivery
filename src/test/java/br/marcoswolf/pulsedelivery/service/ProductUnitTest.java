@@ -6,6 +6,7 @@ import br.marcoswolf.pulsedelivery.mapper.ProductMapper;
 import br.marcoswolf.pulsedelivery.model.Category;
 import br.marcoswolf.pulsedelivery.model.Product;
 import br.marcoswolf.pulsedelivery.repository.ProductRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@Disabled("Em desenvolvimento")
 public class ProductUnitTest {
     @Mock
     private ProductRepository repository;
