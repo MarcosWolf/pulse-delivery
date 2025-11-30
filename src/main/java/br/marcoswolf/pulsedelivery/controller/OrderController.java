@@ -2,6 +2,8 @@ package br.marcoswolf.pulsedelivery.controller;
 
 import br.marcoswolf.pulsedelivery.dto.OrderDTO;
 import br.marcoswolf.pulsedelivery.dto.OrderUpdateDTO;
+import br.marcoswolf.pulsedelivery.kafka.dto.OrderCreatedEventDTO;
+import br.marcoswolf.pulsedelivery.kafka.producer.KafkaEventProducer;
 import br.marcoswolf.pulsedelivery.mapper.OrderMapper;
 import br.marcoswolf.pulsedelivery.model.Order;
 import br.marcoswolf.pulsedelivery.service.OrderService;
@@ -26,6 +28,7 @@ import java.util.List;
 public class OrderController {
     private final OrderService service;
     private final OrderMapper mapper;
+    private KafkaEventProducer kafkaEventProducer;
 
     public OrderController(OrderService service, OrderMapper mapper) {
         this.service = service;
@@ -59,6 +62,16 @@ public class OrderController {
 
         Order order = service.createOrder(orderDTO);
         OrderDTO dto = mapper.toDTO(order);
+
+        OrderCreatedEventDTO event = new OrderCreatedEventDTO(
+                order.getId(),
+                order.getCustomer().getId(),
+                order.getCustomer().getName(),
+                order.getCustomer().getAddress().getStreet(),
+                order.getCreatedAt()
+        );
+        kafkaEventProducer.sendOrderCreatedEvent(event);
+
         return ResponseEntity
                 .created(URI.create("/orders/" + order.getId()))
                 .body(dto);
