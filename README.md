@@ -98,9 +98,9 @@ pulsedelivery/
 │   └── test/
 │       └── java/
 │           └── br/marcoswolf/pulsedelivery/
-│               ├── controller/     # Testes REST com RestAssured
-│               ├── repository/     # Testes com Repository
-│               └── service/        # Testes unitários e de integração
+│               ├── controller/       # Testes REST com RestAssured
+│               ├── repository/       # Testes com Repository
+│               └── service/          # Testes unitários e de integração
 │── docker-compose.yml
 ├── pom.xml
 └── README.md

@@ -17,7 +17,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 import java.net.URI;
 import java.util.List;
@@ -26,6 +25,7 @@ import java.util.List;
 @RequestMapping("/orders")
 @Tag(name = "Orders", description = "Manages customer orders")
 public class OrderController {
+
     private final OrderService service;
     private final OrderMapper mapper;
     private final KafkaEventProducer kafkaEventProducer;
@@ -43,41 +43,46 @@ public class OrderController {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = OrderDTO.class),
-                            examples = @ExampleObject(value = "{\"id\":1,\"customerName\":\"John Doe\",\"status\":\"CREATED\"}")
-                    )),
+                            examples = @ExampleObject(value =
+                                    """
+                                    {
+                                      "id": 1,
+                                      "customer": {
+                                        "id": 10,
+                                        "name": "John Doe",
+                                        "email": "john@example.com",
+                                        "address": {
+                                          "street": "Rua Lobo",
+                                          "number": "123"
+                                        }
+                                      },
+                                      "status": "CREATED",
+                                      "orderItems": [
+                                        { "productId": 5, "quantity": 2 }
+                                      ]
+                                    }
+                                    """
+                            ))),
             @ApiResponse(responseCode = "400", description = "Invalid input data")
     })
     public ResponseEntity<OrderDTO> createOrder(
-            @Valid
-            @org.springframework.web.bind.annotation.RequestBody
-            @RequestBody(
-                    description = "DTO containing order details",
-                    required = true,
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = OrderDTO.class),
-                            examples = @ExampleObject(value = "{\"customerName\":\"John Doe\",\"status\":\"CREATED\"}")
-                    )
-            )
-            OrderDTO orderDTO) {
-
+            @Valid @RequestBody OrderDTO orderDTO
+    ) {
         Order order = service.createOrder(orderDTO);
         OrderDTO dto = mapper.toDTO(order);
 
-//        if (kafkaEventProducer != null) {
-//            String street = (order.getCustomer() != null && order.getCustomer().getAddress() != null)
-//                    ? order.getCustomer().getAddress().getStreet()
-//                    : null;
-//
-//            OrderCreatedEventDTO event = new OrderCreatedEventDTO(
-//                    order.getId(),
-//                    order.getCustomer().getId(),
-//                    order.getCustomer().getName(),
-//                    street,
-//                    order.getCreatedAt()
-//            );
-//            kafkaEventProducer.sendOrderCreatedEvent(event);
-//        }
+        /*
+        if (kafkaEventProducer != null) {
+            OrderCreatedEventDTO event = new OrderCreatedEventDTO(
+                    order.getId(),
+                    order.getCustomer().getId(),
+                    order.getCustomer().getName(),
+                    order.getCustomer().getAddress().getStreet(),
+                    order.getCreatedAt()
+            );
+            kafkaEventProducer.sendOrderCreatedEvent(event);
+        }
+        */
 
         return ResponseEntity
                 .created(URI.create("/orders/" + order.getId()))
@@ -91,57 +96,37 @@ public class OrderController {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = OrderDTO.class),
-                            examples = @ExampleObject(value = "{\"id\":1,\"customerName\":\"Jane Doe\",\"status\":\"COMPLETED\"}")
-                    )),
+                            examples = @ExampleObject(value =
+                                    """
+                                    {
+                                      "id": 1,
+                                      "status": "COMPLETED"
+                                    }
+                                    """
+                            ))),
             @ApiResponse(responseCode = "404", description = "Order not found")
     })
     public ResponseEntity<OrderDTO> updateOrder(
             @PathVariable Long id,
-            @Valid
-            @org.springframework.web.bind.annotation.RequestBody
-            @RequestBody(
-                    description = "DTO containing fields to update",
-                    required = true,
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = OrderUpdateDTO.class),
-                            examples = @ExampleObject(value = "{\"status\":\"COMPLETED\"}")
-                    )
-            )
-            OrderUpdateDTO orderDTO) {
-
-        Order updatedOrder = service.updateOrder(id, orderDTO);
+            @Valid @RequestBody OrderUpdateDTO orderUpdateDTO
+    ) {
+        Order updatedOrder = service.updateOrder(id, orderUpdateDTO);
         return ResponseEntity.ok(mapper.toDTO(updatedOrder));
     }
 
     @GetMapping
     @Operation(summary = "Returns all orders")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "List of orders",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = OrderDTO.class)
-                    ))
-    })
     public ResponseEntity<List<OrderDTO>> getAllOrders() {
-        List<Order> orders = service.getAllOrders();
-        List<OrderDTO> dtos = orders.stream()
+        List<OrderDTO> dtos = service.getAllOrders()
+                .stream()
                 .map(mapper::toDTO)
                 .toList();
+
         return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Returns an order by ID")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Order found",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = OrderDTO.class),
-                            examples = @ExampleObject(value = "{\"id\":1,\"customerName\":\"John Doe\",\"status\":\"CREATED\"}")
-                    )),
-            @ApiResponse(responseCode = "404", description = "Order not found")
-    })
     public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long id) {
         return service.getOrderById(id)
                 .map(mapper::toDTO)
