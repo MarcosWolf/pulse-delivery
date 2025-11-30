@@ -61,7 +61,7 @@ public class DeliveryPersonController {
                 .body(dto);
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     @Operation(summary = "Updates a delivery person's details")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Delivery person successfully updated",
