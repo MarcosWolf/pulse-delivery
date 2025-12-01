@@ -1,10 +1,10 @@
 package br.marcoswolf.pulsedelivery.service;
 
-import br.marcoswolf.pulsedelivery.dto.AddressDTO;
-import br.marcoswolf.pulsedelivery.dto.SellerDTO;
+import br.marcoswolf.pulsedelivery.dto.address.AddressDTO;
+import br.marcoswolf.pulsedelivery.dto.seller.SellerDTO;
 import br.marcoswolf.pulsedelivery.mapper.AddressMapper;
 import br.marcoswolf.pulsedelivery.mapper.SellerMapper;
-import br.marcoswolf.pulsedelivery.mapper.SellerUpdateDTO;
+import br.marcoswolf.pulsedelivery.dto.seller.SellerUpdateDTO;
 import br.marcoswolf.pulsedelivery.model.Address;
 import br.marcoswolf.pulsedelivery.model.Seller;
 import br.marcoswolf.pulsedelivery.repository.SellerRepository;

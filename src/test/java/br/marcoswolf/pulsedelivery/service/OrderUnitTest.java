@@ -1,27 +1,7 @@
 package br.marcoswolf.pulsedelivery.service;
 
-import br.marcoswolf.pulsedelivery.dto.AddressDTO;
-import br.marcoswolf.pulsedelivery.dto.CustomerDTO;
-import br.marcoswolf.pulsedelivery.dto.OrderDTO;
-import br.marcoswolf.pulsedelivery.dto.OrderUpdateDTO;
-import br.marcoswolf.pulsedelivery.mapper.CustomerMapper;
-import br.marcoswolf.pulsedelivery.mapper.OrderItemMapper;
-import br.marcoswolf.pulsedelivery.mapper.OrderMapper;
-import br.marcoswolf.pulsedelivery.model.*;
-import br.marcoswolf.pulsedelivery.repository.OrderRepository;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class OrderUnitTest {

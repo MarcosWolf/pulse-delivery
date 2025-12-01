@@ -1,5 +1,6 @@
-package br.marcoswolf.pulsedelivery.dto;
+package br.marcoswolf.pulsedelivery.dto.product;
 
+import br.marcoswolf.pulsedelivery.dto.category.CategoryDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;

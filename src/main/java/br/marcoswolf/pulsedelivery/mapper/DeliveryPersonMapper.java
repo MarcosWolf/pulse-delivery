@@ -1,6 +1,6 @@
 package br.marcoswolf.pulsedelivery.mapper;
 
-import br.marcoswolf.pulsedelivery.dto.DeliveryPersonDTO;
+import br.marcoswolf.pulsedelivery.dto.deliveryPerson.DeliveryPersonDTO;
 import br.marcoswolf.pulsedelivery.model.DeliveryPerson;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;

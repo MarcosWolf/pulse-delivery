@@ -1,4 +1,4 @@
-package br.marcoswolf.pulsedelivery.mapper;
+package br.marcoswolf.pulsedelivery.dto.seller;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;

@@ -1,7 +1,7 @@
 package br.marcoswolf.pulsedelivery.controller;
 
-import br.marcoswolf.pulsedelivery.dto.CategoryDTO;
-import br.marcoswolf.pulsedelivery.dto.ProductDTO;
+import br.marcoswolf.pulsedelivery.dto.category.CategoryDTO;
+import br.marcoswolf.pulsedelivery.dto.product.ProductDTO;
 import br.marcoswolf.pulsedelivery.mapper.ProductMapper;
 import br.marcoswolf.pulsedelivery.model.Category;
 import br.marcoswolf.pulsedelivery.model.Product;

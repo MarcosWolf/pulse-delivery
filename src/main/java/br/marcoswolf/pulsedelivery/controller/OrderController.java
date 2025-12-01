@@ -1,8 +1,7 @@
 package br.marcoswolf.pulsedelivery.controller;
 
-import br.marcoswolf.pulsedelivery.dto.OrderDTO;
-import br.marcoswolf.pulsedelivery.dto.OrderUpdateDTO;
-import br.marcoswolf.pulsedelivery.kafka.dto.OrderCreatedEventDTO;
+import br.marcoswolf.pulsedelivery.dto.order.OrderDTO;
+import br.marcoswolf.pulsedelivery.dto.order.OrderUpdateDTO;
 import br.marcoswolf.pulsedelivery.kafka.producer.KafkaEventProducer;
 import br.marcoswolf.pulsedelivery.mapper.OrderMapper;
 import br.marcoswolf.pulsedelivery.model.Order;

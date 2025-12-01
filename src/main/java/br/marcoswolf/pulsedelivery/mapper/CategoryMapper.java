@@ -1,6 +1,6 @@
 package br.marcoswolf.pulsedelivery.mapper;
 
-import br.marcoswolf.pulsedelivery.dto.CategoryDTO;
+import br.marcoswolf.pulsedelivery.dto.category.CategoryDTO;
 import br.marcoswolf.pulsedelivery.model.Category;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;

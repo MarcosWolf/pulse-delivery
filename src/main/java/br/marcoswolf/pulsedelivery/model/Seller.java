@@ -32,4 +32,7 @@ public class Seller {
             @AttributeOverride(name = "country", column = @Column(name = "seller_country"))
     })
     private Address address;
+
+    @OneToOne(mappedBy = "seller")
+    private User user;
 }

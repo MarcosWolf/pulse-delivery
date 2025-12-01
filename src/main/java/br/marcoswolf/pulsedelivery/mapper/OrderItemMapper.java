@@ -1,6 +1,6 @@
 package br.marcoswolf.pulsedelivery.mapper;
 
-import br.marcoswolf.pulsedelivery.dto.OrderItemDTO;
+import br.marcoswolf.pulsedelivery.dto.orderItem.OrderItemDTO;
 import br.marcoswolf.pulsedelivery.model.OrderItem;
 import br.marcoswolf.pulsedelivery.model.Product;
 import org.mapstruct.Mapper;

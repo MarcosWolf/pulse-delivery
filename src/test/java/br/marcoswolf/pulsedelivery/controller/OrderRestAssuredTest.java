@@ -1,32 +1,10 @@
 package br.marcoswolf.pulsedelivery.controller;
 
-import br.marcoswolf.pulsedelivery.dto.AddressDTO;
-import br.marcoswolf.pulsedelivery.dto.CustomerDTO;
-import br.marcoswolf.pulsedelivery.dto.OrderDTO;
-import br.marcoswolf.pulsedelivery.dto.OrderItemDTO;
-import br.marcoswolf.pulsedelivery.mapper.OrderMapper;
-import br.marcoswolf.pulsedelivery.model.Category;
-import br.marcoswolf.pulsedelivery.model.Order;
-import br.marcoswolf.pulsedelivery.model.OrderStatus;
-import br.marcoswolf.pulsedelivery.model.Product;
-import br.marcoswolf.pulsedelivery.repository.CategoryRepository;
-import br.marcoswolf.pulsedelivery.repository.OrderRepository;
-import br.marcoswolf.pulsedelivery.repository.ProductRepository;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")

@@ -1,7 +1,7 @@
 package br.marcoswolf.pulsedelivery.service;
 
-import br.marcoswolf.pulsedelivery.dto.OrderDTO;
-import br.marcoswolf.pulsedelivery.dto.OrderUpdateDTO;
+import br.marcoswolf.pulsedelivery.dto.order.OrderDTO;
+import br.marcoswolf.pulsedelivery.dto.order.OrderUpdateDTO;
 import br.marcoswolf.pulsedelivery.mapper.OrderMapper;
 import br.marcoswolf.pulsedelivery.model.Order;
 import br.marcoswolf.pulsedelivery.model.OrderStatus;

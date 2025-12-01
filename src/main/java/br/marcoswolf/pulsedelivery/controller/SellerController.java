@@ -1,9 +1,9 @@
 package br.marcoswolf.pulsedelivery.controller;
 
-import br.marcoswolf.pulsedelivery.dto.AddressDTO;
-import br.marcoswolf.pulsedelivery.dto.SellerDTO;
+import br.marcoswolf.pulsedelivery.dto.address.AddressDTO;
+import br.marcoswolf.pulsedelivery.dto.seller.SellerDTO;
 import br.marcoswolf.pulsedelivery.mapper.SellerMapper;
-import br.marcoswolf.pulsedelivery.mapper.SellerUpdateDTO;
+import br.marcoswolf.pulsedelivery.dto.seller.SellerUpdateDTO;
 import br.marcoswolf.pulsedelivery.model.Seller;
 import br.marcoswolf.pulsedelivery.service.SellerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -71,7 +71,7 @@ public class SellerController {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = SellerDTO.class),
-                            examples = @ExampleObject(value = "{\"id\":1,\"name\":\"Acme Corp\",\"address\":{\"street\":\"Main St\",\"number\":\"456\",\"city\":\"Metropolis\",\"state\":\"NY\",\"zip\":\"10001\",\"country\":\"USA\"}}")
+                            examples = @ExampleObject(value = "{\"id\":1,\"name\":\"Acme Corp\",\"address\":{\"street\":\"Main St\",\"number\":\"456\",\"complement\":\"Apt 123\",\"neighborhood\":\"Centro\",\"city\":\"Metropolis\",\"state\":\"NY\",\"postalCode\":\"10001\",\"country\":\"USA\"}}")
                     )),
             @ApiResponse(responseCode = "404", description = "Seller not found")
     })
@@ -85,7 +85,7 @@ public class SellerController {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = AddressDTO.class),
-                            examples = @ExampleObject(value = "{\"street\":\"Main St\",\"number\":\"456\",\"city\":\"Metropolis\",\"state\":\"NY\",\"zip\":\"10001\",\"country\":\"USA\"}")
+                            examples = @ExampleObject(value = "{\"street\":\"Main St\",\"number\":\"456\",\"complement\":\"Apt 123\",\"neighborhood\":\"Centro\",\"city\":\"Metropolis\",\"state\":\"NY\",\"zip\":\"10001\",\"country\":\"USA\"}")
                     )
             )
             AddressDTO dto) {
@@ -148,7 +148,7 @@ public class SellerController {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = SellerDTO.class),
-                            examples = @ExampleObject(value = "{\"id\":1,\"name\":\"Acme Corp\",\"email\":\"acme@example.com\",\"address\":{\"street\":\"Main St\",\"number\":\"123\",\"city\":\"Metropolis\",\"state\":\"NY\",\"zip\":\"10001\",\"country\":\"USA\"}}")
+                            examples = @ExampleObject(value = "{\"id\":1,\"name\":\"Acme Corp\",\"email\":\"acme@example.com\",\"address\":{\"street\":\"Main St\",\"number\":\"123\",\"complement\":\"Apt 123\",\"neighborhood\":\"Centro\",\"city\":\"Metropolis\",\"state\":\"NY\",\"zip\":\"10001\",\"country\":\"USA\"}}")
                     )),
             @ApiResponse(responseCode = "404", description = "Seller not found")
     })

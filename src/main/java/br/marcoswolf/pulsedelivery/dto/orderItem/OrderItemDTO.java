@@ -1,4 +1,4 @@
-package br.marcoswolf.pulsedelivery.dto;
+package br.marcoswolf.pulsedelivery.dto.orderItem;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

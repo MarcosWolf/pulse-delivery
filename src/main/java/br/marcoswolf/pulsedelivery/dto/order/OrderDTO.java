@@ -1,5 +1,9 @@
-package br.marcoswolf.pulsedelivery.dto;
+package br.marcoswolf.pulsedelivery.dto.order;
 
+import br.marcoswolf.pulsedelivery.dto.orderItem.OrderItemDTO;
+import br.marcoswolf.pulsedelivery.dto.seller.SellerDTO;
+import br.marcoswolf.pulsedelivery.dto.address.AddressDTO;
+import br.marcoswolf.pulsedelivery.dto.customer.CustomerDTO;
 import br.marcoswolf.pulsedelivery.model.OrderStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
