@@ -1,5 +1,6 @@
 package br.marcoswolf.pulsedelivery.auth;
 
+import br.marcoswolf.pulsedelivery.dto.auth.RegisterRequestDTO;
 import br.marcoswolf.pulsedelivery.model.User;
 import br.marcoswolf.pulsedelivery.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthenticationController {
     private final UserRepository repository;
+    private final AuthService authService;
 
-    public AuthenticationController(UserRepository repository) {
+    public AuthenticationController(UserRepository repository, AuthService authService) {
         this.repository = repository;
+        this.authService = authService;
     }
 
     @PostMapping("/login")
@@ -27,5 +30,11 @@ public class AuthenticationController {
         }
 
         return ResponseEntity.ok(new LoginResponse("Token"));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody RegisterRequestDTO requestDTO) {
+        User user = authService.register(requestDTO);
+        return ResponseEntity.ok("User created with id: " + user.getId());
     }
 }
