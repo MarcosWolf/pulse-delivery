@@ -24,6 +24,7 @@ O PulseDelivery é uma solução backend robusta para empresas e serviços de en
 ### Backend
 
 - <b>Spring Boot:</b> framework principal para a API REST
+- <b>Spring Security + JWT:</b> autenticação e autorização com tokens JWT
 - <b>JPA/Hibernate:</b> persistência de dados com ORM
 - <b>MapStruct:</b> mapeamento automático entre DTOs e entidades
 - <b>PostgreSQL + Docker:</b> banco de dados persistido via container Docker
@@ -37,6 +38,11 @@ O PulseDelivery é uma solução backend robusta para empresas e serviços de en
 
 ### Containers e Ambiente
 - <b>Docker:</b> orquestração de containers para banco de dados e ambiente isolado
+
+### Documentação da API
+
+- <b>Swagger / Springdoc OpenAPI:</b> documentação interativa da API
+
 
 ## Executando a Aplicação
 
@@ -86,13 +92,15 @@ pulsedelivery/
 │   ├── main/
 │   │   ├── java/
 │   │   │   └── br/marcoswolf/pulsedelivery/
-│   │   │       ├── config/           # Configurações
+│   │   │       ├── auth/             # Autenticação
+│   │   │       ├── config/           # Configurações gerais da aplicação
 │   │   │       ├── controller/       # Controladores REST
-│   │   │       ├── dto/              # DTO
+│   │   │       ├── dto/              # DTOs de entrada e saída
 │   │   │       ├── kafka/            # Estrutura da mensageria
 │   │   │       ├── mapper/           # Mappers
 │   │   │       ├── model/            # Classes de domínio
 │   │   │       ├── repository/       # Interfaces de acesso a dados
+│   │   │       ├── security/         # Configuração de Segurança
 │   │   │       └── service/          # Lógica de negócio
 │   │   └── resources/
 │   └── test/
