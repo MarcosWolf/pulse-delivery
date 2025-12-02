@@ -30,6 +30,12 @@ O PulseDelivery é uma solução backend robusta para empresas e serviços de en
 - <b>PostgreSQL + Docker:</b> banco de dados persistido via container Docker
 - <b>H2 Database:</b> usado em memória apenas para testes
 
+### Frontend
+
+- <b>React:</b> biblioteca para construção da interface do usuário
+- <b>TypeScript:</b> tipagem estática para maior segurança e robustez no frontend
+- <b>Axios:</b> cliente HTTP para comunicação com o backend
+
 ### Testes
 
 - <b>JUnit:</b> testes unitários e de integração
@@ -50,7 +56,7 @@ O PulseDelivery é uma solução backend robusta para empresas e serviços de en
 
 ```bash
 git clone https://github.com/MarcosWolf/pulse-delivery.git
-cd pulse-delivery
+cd pulse-delivery/backend
 ```
 
 2. Certifique-se de que o Docker está rodando.
@@ -118,6 +124,7 @@ pulsedelivery/
 
 A aplicação expõe uma API REST completa para integração com outros sistemas:
 
+- `GET/POST /auth` - Gerenciamento de autenticação
 - `GET/PATCH/POST /categories` - Gerenciamento de categorias
 - `GET/PATCH/POST /customers` – Gerenciamento de clientes
 - `GET/PUT/POST /delivery-persons` - Gerenciamento de entregadores
