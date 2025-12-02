@@ -1,14 +1,12 @@
 package br.marcoswolf.pulsedelivery.auth;
 
 import br.marcoswolf.pulsedelivery.dto.auth.RegisterRequestDTO;
+import br.marcoswolf.pulsedelivery.dto.user.UserInfoDTO;
 import br.marcoswolf.pulsedelivery.model.User;
 import br.marcoswolf.pulsedelivery.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -46,5 +44,16 @@ public class AuthenticationController {
     public ResponseEntity<?> register(@RequestBody RegisterRequestDTO requestDTO) {
         User user = authService.register(requestDTO);
         return ResponseEntity.ok("User created with id: " + user.getId());
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<UserInfoDTO> getProfileInfo(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        String email = jwtService.extractEmail(token);
+        User user = repository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        UserInfoDTO dto = new UserInfoDTO(user.getEmail(), user.getRole());
+        return ResponseEntity.ok(dto);
     }
 }
