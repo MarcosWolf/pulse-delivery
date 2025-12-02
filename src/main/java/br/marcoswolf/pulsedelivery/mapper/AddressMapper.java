@@ -1,6 +1,6 @@
 package br.marcoswolf.pulsedelivery.mapper;
 
-import br.marcoswolf.pulsedelivery.dto.AddressDTO;
+import br.marcoswolf.pulsedelivery.dto.address.AddressDTO;
 import br.marcoswolf.pulsedelivery.model.Address;
 import org.mapstruct.Mapper;
 

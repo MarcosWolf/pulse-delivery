@@ -1,6 +1,6 @@
 package br.marcoswolf.pulsedelivery.service;
 
-import br.marcoswolf.pulsedelivery.dto.ProductDTO;
+import br.marcoswolf.pulsedelivery.dto.product.ProductDTO;
 import br.marcoswolf.pulsedelivery.mapper.ProductMapper;
 import br.marcoswolf.pulsedelivery.model.Product;
 import br.marcoswolf.pulsedelivery.repository.ProductRepository;

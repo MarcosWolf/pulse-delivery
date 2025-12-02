@@ -1,7 +1,7 @@
-package br.marcoswolf.pulsedelivery.dto;
+package br.marcoswolf.pulsedelivery.dto.address;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-@Schema(name = "Address", description = "Represents a customer address")
+@Schema(name = "Address", description = "Represents an address")
 public record AddressDTO (
         @Schema(description = "Street name", example = "Avenue Vinicios")
         String street,

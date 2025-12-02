@@ -1,8 +1,8 @@
 package br.marcoswolf.pulsedelivery.controller;
 
-import br.marcoswolf.pulsedelivery.dto.AddressDTO;
-import br.marcoswolf.pulsedelivery.dto.CustomerDTO;
-import br.marcoswolf.pulsedelivery.dto.CustomerUpdateDTO;
+import br.marcoswolf.pulsedelivery.dto.address.AddressDTO;
+import br.marcoswolf.pulsedelivery.dto.customer.CustomerDTO;
+import br.marcoswolf.pulsedelivery.dto.customer.CustomerUpdateDTO;
 import br.marcoswolf.pulsedelivery.mapper.CustomerMapper;
 import br.marcoswolf.pulsedelivery.model.Customer;
 import br.marcoswolf.pulsedelivery.service.CustomerService;
@@ -53,7 +53,7 @@ public class CustomerController {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = CustomerDTO.class),
-                            examples = @ExampleObject(value = "{\"name\":\"John Doe\",\"email\":\"john@example.com\",\"address\":{\"street\":\"Main St\",\"number\":\"123\",\"city\":\"Springfield\",\"state\":\"IL\",\"zip\":\"62701\",\"country\":\"USA\"}}")
+                            examples = @ExampleObject(value = "{\"name\":\"John Doe\",\"email\":\"john@example.com\",\"address\":{\"street\":\"Main St\",\"number\":\"123\",\"complement\":\"Apt 123\",\"neighborhood\":\"Centro\",\"city\":\"Springfield\",\"state\":\"IL\",\"zip\":\"62701\",\"country\":\"USA\"}}")
                     )
             )
             CustomerDTO customerDTO) {
@@ -72,7 +72,7 @@ public class CustomerController {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = CustomerDTO.class),
-                            examples = @ExampleObject(value = "{\"id\":1,\"name\":\"John Doe\",\"address\":{\"street\":\"Main St\",\"number\":\"456\",\"city\":\"Springfield\",\"state\":\"IL\",\"zip\":\"62701\",\"country\":\"USA\"}}")
+                            examples = @ExampleObject(value = "{\"id\":1,\"name\":\"John Doe\",\"address\":{\"street\":\"Main St\",\"number\":\"456\",\"complement\":\"Apt 123\",\"neighborhood\":\"Centro\",\"city\":\"Springfield\",\"state\":\"IL\",\"postalCode\":\"62701\",\"country\":\"USA\"}}")
                     )),
             @ApiResponse(responseCode = "404", description = "Customer not found")
     })
@@ -86,7 +86,7 @@ public class CustomerController {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = AddressDTO.class),
-                            examples = @ExampleObject(value = "{\"street\":\"Main St\",\"number\":\"456\",\"city\":\"Springfield\",\"state\":\"IL\",\"zip\":\"62701\",\"country\":\"USA\"}")
+                            examples = @ExampleObject(value = "{\"street\":\"Main St\",\"number\":\"456\",\"complement\":\"Apt 123\",\"neighborhood\":\"Centro\",\"city\":\"Springfield\",\"state\":\"IL\",\"postalCode\":\"62701\",\"country\":\"USA\"}")
                     )
             )
             AddressDTO dto) {
@@ -149,7 +149,7 @@ public class CustomerController {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = CustomerDTO.class),
-                            examples = @ExampleObject(value = "{\"id\":1,\"name\":\"John Doe\",\"email\":\"john@example.com\",\"address\":{\"street\":\"Main St\",\"number\":\"123\",\"city\":\"Springfield\",\"state\":\"IL\",\"zip\":\"62701\",\"country\":\"USA\"}}")
+                            examples = @ExampleObject(value = "{\"id\":1,\"name\":\"John Doe\",\"email\":\"john@example.com\",\"address\":{\"street\":\"Main St\",\"number\":\"123\",\"complement\":\"Apt 123\",\"neighborhood\":\"Centro\",\"city\":\"Springfield\",\"state\":\"IL\",\"postalCode\":\"62701\",\"country\":\"USA\"}}")
                     )),
             @ApiResponse(responseCode = "404", description = "Customer not found")
     })

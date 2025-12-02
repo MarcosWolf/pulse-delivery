@@ -1,11 +1,12 @@
 package br.marcoswolf.pulsedelivery.service;
 
-import br.marcoswolf.pulsedelivery.dto.OrderDTO;
-import br.marcoswolf.pulsedelivery.dto.OrderUpdateDTO;
+import br.marcoswolf.pulsedelivery.dto.order.OrderDTO;
+import br.marcoswolf.pulsedelivery.dto.order.OrderUpdateDTO;
 import br.marcoswolf.pulsedelivery.mapper.OrderMapper;
 import br.marcoswolf.pulsedelivery.model.Order;
 import br.marcoswolf.pulsedelivery.model.OrderStatus;
 import br.marcoswolf.pulsedelivery.repository.OrderRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Service
 public class OrderService {
+
     private final OrderRepository repository;
     private final OrderMapper mapper;
 
@@ -23,28 +25,21 @@ public class OrderService {
         this.mapper = mapper;
     }
 
+    @Transactional
     public Order createOrder(OrderDTO orderDTO) {
-        if (orderDTO == null) {
-            throw new IllegalArgumentException("Order cannot be null");
-        }
-
         Order order = mapper.toEntity(orderDTO);
         order.setStatus(OrderStatus.CREATED);
         order.setCreatedAt(LocalDateTime.now());
-
-        if (order.getOrderItems() != null) {
-            order.getOrderItems().forEach(item -> item.setOrder(order));
-        }
 
         return repository.save(order);
     }
 
     @Transactional
-    public Order updateOrder(Long id, OrderUpdateDTO updatedDTO) {
+    public Order updateOrder(Long id, OrderUpdateDTO updateDTO) {
         Order existingOrder = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(("Order not found")));
+                .orElseThrow(() -> new EntityNotFoundException("Order not found with id: " + id));
 
-        mapper.updateOrderFromDTO(updatedDTO, existingOrder);
+        mapper.updateOrderFromDTO(updateDTO, existingOrder);
 
         return repository.save(existingOrder);
     }

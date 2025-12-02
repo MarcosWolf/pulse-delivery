@@ -86,8 +86,10 @@ pulsedelivery/
 │   ├── main/
 │   │   ├── java/
 │   │   │   └── br/marcoswolf/pulsedelivery/
+│   │   │       ├── config/           # Configurações
 │   │   │       ├── controller/       # Controladores REST
 │   │   │       ├── dto/              # DTO
+│   │   │       ├── kafka/            # Estrutura da mensageria
 │   │   │       ├── mapper/           # Mappers
 │   │   │       ├── model/            # Classes de domínio
 │   │   │       ├── repository/       # Interfaces de acesso a dados
@@ -96,8 +98,9 @@ pulsedelivery/
 │   └── test/
 │       └── java/
 │           └── br/marcoswolf/pulsedelivery/
-│               ├── controller/     # Testes REST com RestAssured
-│               ├── service/        # Testes unitários e de integração
+│               ├── controller/       # Testes REST com RestAssured
+│               ├── repository/       # Testes com Repository
+│               └── service/          # Testes unitários e de integração
 │── docker-compose.yml
 ├── pom.xml
 └── README.md
@@ -109,8 +112,10 @@ A aplicação expõe uma API REST completa para integração com outros sistemas
 
 - `GET/PATCH/POST /categories` - Gerenciamento de categorias
 - `GET/PATCH/POST /customers` – Gerenciamento de clientes
+- `GET/PUT/POST /delivery-persons` - Gerenciamento de entregadores
 - `GET/PUT/POST /orders` – Gerenciamento de pedidos
 - `GET/PATCH/POST /products` - Gerenciamento de produtos
+- `GET/PATCH/POST /sellers` - Gerenciamento de vendedores
 
 ### Documentação da API (Swagger)
 

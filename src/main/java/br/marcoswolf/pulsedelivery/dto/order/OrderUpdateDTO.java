@@ -1,4 +1,4 @@
-package br.marcoswolf.pulsedelivery.dto;
+package br.marcoswolf.pulsedelivery.dto.order;
 
 import br.marcoswolf.pulsedelivery.model.OrderStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
