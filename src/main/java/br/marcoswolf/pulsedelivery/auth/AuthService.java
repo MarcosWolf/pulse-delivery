@@ -23,7 +23,7 @@ public class AuthService {
 
         User user = new User();
         user.setEmail(requestDTO.email());
-        user.setEmail(requestDTO.email());
+        user.setPassword(passwordEncoder.encode(requestDTO.password()));
         user.setRole(requestDTO.role());
 
         return repository.save(user);

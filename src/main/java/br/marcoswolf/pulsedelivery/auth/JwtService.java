@@ -1,5 +1,6 @@
 package br.marcoswolf.pulsedelivery.auth;
 
+import br.marcoswolf.pulsedelivery.model.Role;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -13,7 +14,7 @@ public class JwtService {
     private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 24;
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    public String generateToken(String email, String role) {
+    public String generateToken(String email, Role role) {
         return Jwts.builder()
                 .setSubject(email)
                 .claim("role", role)
