@@ -1,13 +1,6 @@
 import axios from "axios";
-
-export interface LoginRequest {
-  email: string;
-  password: string;
-}
-
-export interface LoginResponse {
-  token: string;
-}
+import type { LoginRequest } from "../types/LoginRequest";
+import type { LoginResponse } from "../types/LoginResponse";
 
 export class AuthService {
   private readonly baseUrl = "http://localhost:8080/auth";
