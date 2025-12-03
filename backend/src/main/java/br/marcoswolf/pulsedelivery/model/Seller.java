@@ -15,10 +15,8 @@ public class Seller {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
     private String document;
     private String phone;
-    private String email;
 
     @Embedded
     @AttributeOverrides({
