@@ -53,7 +53,7 @@ public class AuthenticationController {
         User user = repository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        UserInfoDTO dto = new UserInfoDTO(user.getEmail(), user.getRole());
+        UserInfoDTO dto = new UserInfoDTO(user.getName(), user.getEmail(), user.getRole());
         return ResponseEntity.ok(dto);
     }
 }

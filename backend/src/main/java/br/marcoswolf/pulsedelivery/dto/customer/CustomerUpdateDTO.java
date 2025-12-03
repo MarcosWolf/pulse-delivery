@@ -9,12 +9,6 @@ public record CustomerUpdateDTO(
         @Schema(description = "Customer ID", example = "1")
         Long id,
 
-        @NotBlank(message = "Name is required")
-        @Schema(description = "Customer name", example = "John Doe")
-        String name,
-
-        @NotBlank(message = "Email is required")
-        @Email(message = "Email must be valid")
-        @Schema(description = "Customer email", example = "john.doe@example.com")
-        String email
+        @Schema(description = "Customer phone", example = "13912345678")
+        String phone
 ) {}

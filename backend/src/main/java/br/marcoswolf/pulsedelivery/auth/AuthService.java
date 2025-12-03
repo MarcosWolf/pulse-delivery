@@ -22,6 +22,7 @@ public class AuthService {
         }
 
         User user = new User();
+        user.setName(requestDTO.name());
         user.setEmail(requestDTO.email());
         user.setPassword(passwordEncoder.encode(requestDTO.password()));
         user.setRole(requestDTO.role());
