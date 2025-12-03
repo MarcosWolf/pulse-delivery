@@ -1,9 +1,6 @@
 import axios from "axios";
 
-export interface UserInfo {
-    email: string;
-    role: string;
-}
+import type { UserInfo } from "../types/UserInfo";
 
 export class UserService {
     private readonly baseUrl = "http://localhost:8080";

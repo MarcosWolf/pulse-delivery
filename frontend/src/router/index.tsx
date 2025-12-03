@@ -1,6 +1,6 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
 import { LoginPage } from "../modules/auth/pages/LoginPage";
-import { AppLayout } from "../shared/layouts/AppLayout";
+import { NavigationLayout } from "../shared/layouts/NavigationLayout";
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
     const token = localStorage.getItem("token");
@@ -21,7 +21,7 @@ export const router = createBrowserRouter([
         path: "/",
         element: (
             <PrivateRoute>
-                <AppLayout />
+                <NavigationLayout />
             </PrivateRoute>
         ),
         children: [
