@@ -1,6 +1,8 @@
 package br.marcoswolf.pulsedelivery.auth;
 
-import br.marcoswolf.pulsedelivery.dto.auth.RegisterRequestDTO;
+import br.marcoswolf.pulsedelivery.dto.auth.SignupRequestDTO;
+import br.marcoswolf.pulsedelivery.dto.user.UserInfoDTO;
+import br.marcoswolf.pulsedelivery.model.Customer;
 import br.marcoswolf.pulsedelivery.model.User;
 import br.marcoswolf.pulsedelivery.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,17 +18,24 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User register(RegisterRequestDTO requestDTO) {
+    public UserInfoDTO signup(SignupRequestDTO requestDTO) {
         if (repository.existsByEmail(requestDTO.email())) {
             throw new RuntimeException("Email already in use");
         }
 
-        User user = new User();
-        user.setName(requestDTO.name());
-        user.setEmail(requestDTO.email());
-        user.setPassword(passwordEncoder.encode(requestDTO.password()));
-        user.setRole(requestDTO.role());
+        Customer customer = new Customer();
+        customer.setName(requestDTO.name());
+        customer.setEmail(requestDTO.email());
+        customer.setPassword(passwordEncoder.encode(requestDTO.password()));
+        customer.setRole(requestDTO.role());
 
-        return repository.save(user);
+        User savedUser = repository.save(customer);
+
+        return new UserInfoDTO(
+                savedUser.getId(),
+                savedUser.getName(),
+                savedUser.getEmail(),
+                savedUser.getRole()
+        );
     }
 }

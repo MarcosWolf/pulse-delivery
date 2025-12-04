@@ -2,7 +2,7 @@ package br.marcoswolf.pulsedelivery.dto.auth;
 
 import br.marcoswolf.pulsedelivery.model.Role;
 
-public record RegisterRequestDTO (
+public record SignupRequestDTO(
    String name,
    String email,
    String password,
