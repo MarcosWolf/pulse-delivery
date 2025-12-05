@@ -10,13 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "sellers")
-public class Seller {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String document;
+public class Seller extends User {
     private String phone;
+    private String document;
 
     @Embedded
     @AttributeOverrides({
@@ -30,7 +26,4 @@ public class Seller {
             @AttributeOverride(name = "country", column = @Column(name = "seller_country"))
     })
     private Address address;
-
-    @OneToOne(mappedBy = "seller")
-    private User user;
 }

@@ -1,6 +1,7 @@
 package br.marcoswolf.pulsedelivery.auth;
 
-import br.marcoswolf.pulsedelivery.dto.auth.RegisterRequestDTO;
+import br.marcoswolf.pulsedelivery.dto.auth.SignupRequestDTO;
+import br.marcoswolf.pulsedelivery.dto.auth.SignupResponseDTO;
 import br.marcoswolf.pulsedelivery.dto.user.UserInfoDTO;
 import br.marcoswolf.pulsedelivery.model.User;
 import br.marcoswolf.pulsedelivery.repository.UserRepository;
@@ -40,10 +41,17 @@ public class AuthenticationController {
         return ResponseEntity.ok(new LoginResponse(token));
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequestDTO requestDTO) {
-        User user = authService.register(requestDTO);
-        return ResponseEntity.ok("User created with id: " + user.getId());
+    @PostMapping("/signup")
+    public ResponseEntity<SignupResponseDTO> signup(@RequestBody SignupRequestDTO requestDTO) {
+        UserInfoDTO user = authService.signup(requestDTO);
+        String token = jwtService.generateToken(user.email(), user.role());
+        SignupResponseDTO response = new SignupResponseDTO(
+                user.id(),
+                user.email(),
+                token
+        );
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/profile")
@@ -53,7 +61,7 @@ public class AuthenticationController {
         User user = repository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        UserInfoDTO dto = new UserInfoDTO(user.getName(), user.getEmail(), user.getRole());
+        UserInfoDTO dto = new UserInfoDTO(user.getId(), user.getName(), user.getEmail(), user.getRole());
         return ResponseEntity.ok(dto);
     }
 }
