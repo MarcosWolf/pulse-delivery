@@ -49,9 +49,8 @@ export const SellerNav = () => {
                     <span className="text-orange-600 font-bold text-sm">Pulse Delivery</span>
                     <nav>
                         <ul className="flex gap-4 text-gray-700">
-                            <li><Link className="hover:text-orange-600 transition" to="/customer/dashboard">Início</Link></li>
-                            <li><Link className="hover:text-orange-600 transition" to="/customer/restaurantes">Restaurantes</Link></li>
-                            <li><Link className="hover:text-orange-600 transition" to="/customer/mercados">Mercados</Link></li>
+                            <li><Link className="hover:text-orange-600 transition" to="/seller/dashboard">Home</Link></li>
+                            <li><Link className="hover:text-orange-600 transition" to="/seller/products">Products</Link></li>
                         </ul>
                     </nav>
                 </div>
@@ -83,20 +82,12 @@ export const SellerNav = () => {
                                 <p className="text-xl">Olá, {user?.name}!</p>
                             </div>
                             <ul className="flex flex-col">
-                                <li><Link className="block px-4 py-2 hover:bg-orange-50 hover:text-orange-600 transition" to="/customer/pedidos">Pedidos</Link></li>
-                                <li><Link className="block px-4 py-2 hover:bg-orange-50 hover:text-orange-600 transition" to="/customer/meus-dados">Meus dados</Link></li>
+                                <li><Link className="block px-4 py-2 hover:bg-orange-50 hover:text-orange-600 transition" to="/seller/orders">Orders</Link></li>
+                                <li><Link className="block px-4 py-2 hover:bg-orange-50 hover:text-orange-600 transition" to="/seller/edit-profile">Edit Profile</Link></li>
                                 <li><button onClick={handleLogout} className="block w-full text-left px-4 py-2 hover:bg-orange-50 hover:text-orange-600 transition">Sair</button></li>
                             </ul>
                         </div>
                     )}
-
-                    <button
-                        onClick={() => setCartOpen(!cartOpen)}
-                        className="flex items-center gap-2 text-gray-700 hover:text-orange-600 transition cursor-pointer"
-                    >
-                        <FaShoppingCart size={22} />
-                        <span className="font-semibold text-sm">R$ {cartTotal.toFixed(2)}</span>
-                    </button>
                 </div>
             </header>
 

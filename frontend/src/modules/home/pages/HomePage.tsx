@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
-interface MyJwtPayload {
+interface jwtPayload {
     sub: string;
     role: "CUSTOMER" | "SELLER" | "DELIVERYPERSON";
     exp: number;
@@ -10,7 +10,7 @@ interface MyJwtPayload {
 export const Home = () => {
     const token = localStorage.getItem("token");
     if (token != null) {
-        const decoded = jwtDecode<MyJwtPayload>(token);
+        const decoded = jwtDecode<jwtPayload>(token);
 
         if (token && decoded) {
             switch (decoded.role) {

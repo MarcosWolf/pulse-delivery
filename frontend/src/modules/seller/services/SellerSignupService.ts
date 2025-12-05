@@ -1,12 +1,11 @@
-import axios from "axios";
+import { api } from "../../../shared/services/api";
 import type { SellerSignupRequest } from "../types/SellerSignupRequest";
 import type { SellerSignupResponse } from "../types/SellerSignupResponse";
 
 export class SellerSignupService {
-  private readonly baseUrl = "http://localhost:8080/auth";
 
   async signup(data: SellerSignupRequest): Promise<SellerSignupResponse> {
-    const response = await axios.post<SellerSignupResponse>(`${this.baseUrl}/signup`, data);
+    const response = await api.post<SellerSignupResponse>(`auth/signup`, data);
     return response.data;
 }
 
