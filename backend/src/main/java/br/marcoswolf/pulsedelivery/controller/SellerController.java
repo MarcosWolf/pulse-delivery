@@ -2,6 +2,7 @@ package br.marcoswolf.pulsedelivery.controller;
 
 import br.marcoswolf.pulsedelivery.dto.address.AddressDTO;
 import br.marcoswolf.pulsedelivery.dto.seller.SellerDTO;
+import br.marcoswolf.pulsedelivery.dto.seller.SellerImageDTO;
 import br.marcoswolf.pulsedelivery.mapper.SellerMapper;
 import br.marcoswolf.pulsedelivery.dto.seller.SellerUpdateDTO;
 import br.marcoswolf.pulsedelivery.model.Seller;
@@ -14,8 +15,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.util.List;
@@ -62,6 +65,18 @@ public class SellerController {
         return ResponseEntity
                 .created(URI.create("/sellers/" + seller.getId()))
                 .body(dto);
+    }
+
+    @PatchMapping(
+            value = "/{id}/image",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public ResponseEntity<SellerDTO> updateImage(
+            @RequestPart("storeImage") MultipartFile file,
+            @PathVariable Long id
+    ) {
+        Seller updated = service.updateImage(id, file);
+        return ResponseEntity.ok(mapper.toDTO(updated));
     }
 
     @PatchMapping("/{id}/address")

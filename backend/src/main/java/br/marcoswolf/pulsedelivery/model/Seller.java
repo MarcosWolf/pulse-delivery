@@ -14,6 +14,9 @@ public class Seller extends User {
     private String phone;
     private String document;
 
+    @Column(name = "store_image_url")
+    private String storeImageUrl;
+
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "street", column = @Column(name = "seller_street")),
