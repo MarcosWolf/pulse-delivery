@@ -1,4 +1,4 @@
-export const SellerHomePage = () => {
+export const SellerDashboard = () => {
     return (
         <div className="p-6 space-y-8">
             <section>

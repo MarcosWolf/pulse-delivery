@@ -1,49 +1,89 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
-import { LoginPage } from "../modules/auth/pages/LoginPage";
-import { NavigationLayout } from "../shared/layouts/NavigationLayout";
-import { CustomerSignupPage } from "../modules/customer/pages/CustomerSignupPage";
-import { SellerSignupPage } from "../modules/seller/pages/SellerSignupPage";
-import { RoleBasedRedirect } from "../shared/pages/RoleBasedRedirect";
+import { Login } from "../modules/auth/pages/LoginPage";
 
-const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
-    const token = localStorage.getItem("token");
+import { HomeLayout } from "../shared/layouts/HomeLayout";
+import { CustomerLayout } from "../shared/layouts/CustomerLayout";
+import { SellerLayout } from "../shared/layouts/SellerLayout";
+import { DeliveryPersonLayout } from "../shared/layouts/DeliveryPersonLayout";
+import { PrivateRoute } from "../shared/components/PrivateRoute";
 
-    if (!token) {
-        return <Navigate to="/login" replace />
-    }
+import { Home } from "../modules/home/pages/HomePage";
 
-    return children;
-};
+import { CustomerSignup } from "../modules/customer/pages/CustomerSignupPage";
+import { CustomerDashboard } from "../modules/customer/pages/CustomerDashboardPage";
+
+import { SellerSignup } from "../modules/seller/pages/SellerSignupPage";
+import { SellerDashboard } from "../modules/seller/pages/SellerDashboardPage";
+
+import { DeliveryPersonSignup } from "../modules/deliveryPerson/pages/DeliveryPersonSignupPage";
+import { DeliveryPersonDashboard } from "../modules/deliveryPerson/pages/DeliveryPersonDashboardPage";
+
 
 export const router = createBrowserRouter([
     {
-        path: "/login",
-        element: <LoginPage />,
-    },
-    {
-        path: "/customer/signup",
-        element: <CustomerSignupPage />,
-    },
-    {
-        path: "/seller/signup",
-        element: <SellerSignupPage />,
-    },
-    {
         path: "/",
-        element: (
-            <PrivateRoute>
-                <NavigationLayout />
-            </PrivateRoute>
-        ),
+        element: <HomeLayout />,
         children: [
-            {
-                index: true,
-                element: <RoleBasedRedirect />,
-            },
+            { index: true, element: <Home /> },
         ],
     },
     {
+        path: "/auth/login",
+        element: <Login />,
+    },
+    {
+        path: "/customer/signup",
+        element: <CustomerSignup />,
+    },
+    {
+        path: "/seller/signup",
+        element: <SellerSignup />,
+    },
+    {
+        path: "/deliveryperson/signup",
+        element: <DeliveryPersonSignup />,
+    },
+    {
+        path: "/customer",
+        element: (
+            <PrivateRoute>
+                <CustomerLayout />
+            </PrivateRoute>
+        ),
+        children: [
+            { index: true, element: <Navigate to="/customer/dashboard" replace /> },
+            { path: "dashboard", element: <CustomerDashboard /> },
+        ],
+    },
+
+    {
+        path: "/seller",
+        element: (
+            <PrivateRoute>
+                <SellerLayout />
+            </PrivateRoute>
+        ),
+        children: [
+            { index: true, element: <Navigate to="/seller/dashboard" replace /> },
+            { path: "dashboard", element: <SellerDashboard /> },
+        ],
+    },
+
+    {
+        path: "/delivery",
+        element: (
+            <PrivateRoute>
+                <DeliveryPersonLayout />
+            </PrivateRoute>
+        ),
+        children: [
+            { index: true, element: <Navigate to="/deliveryperson/dashboard" replace /> },
+            { path: "dashboard", element: <DeliveryPersonDashboard /> },
+        ],
+    },
+
+    {
         path: "*",
-        element: <Navigate to="/login" replace />,
-    }
+        element: <Navigate to="/" replace />,
+    },
 ]);

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { SellerSignupForm } from "../components/SellerSignupForm";
 
-export const SellerSignupPage = () => {
+export const SellerSignup = () => {
     const navigate = useNavigate();
 
     const handleSignupSuccess = () => {

@@ -1,4 +1,4 @@
-export const DeliveryPersonHomePage = () => {
+export const DeliveryPersonDashboard = () => {
     return (
         <div className="p-6 space-y-8">
             <section>

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { CustomerSignupForm } from "../components/CustomerSignupForm";
 
-export const CustomerSignupPage = () => {
+export const CustomerSignup = () => {
     const navigate = useNavigate();
 
     const handleSignupSuccess = () => {

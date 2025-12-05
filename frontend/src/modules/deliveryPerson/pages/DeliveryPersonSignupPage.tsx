@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { DeliveryPersonSignupForm } from "../components/DeliveryPersonSignupForm";
 
-export const DeliveryPersonSignupPage = () => {
+export const DeliveryPersonSignup = () => {
     const navigate = useNavigate();
 
     const handleSignupSuccess = () => {
