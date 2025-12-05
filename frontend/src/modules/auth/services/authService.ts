@@ -1,12 +1,10 @@
-import axios from "axios";
+import { api } from "../../../shared/services/api";
 import type { LoginRequest } from "../types/LoginRequest";
 import type { LoginResponse } from "../types/LoginResponse";
 
 export class AuthService {
-  private readonly baseUrl = "http://localhost:8080/auth";
-
   async login(data: LoginRequest): Promise<LoginResponse> {
-    const response = await axios.post<LoginResponse>(`${this.baseUrl}/login`, data);
+    const response = await api.post<LoginResponse>(`auth/login`, data);
     return response.data;
   }
 

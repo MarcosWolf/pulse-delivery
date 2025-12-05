@@ -14,6 +14,7 @@ import { CustomerDashboard } from "../modules/customer/pages/CustomerDashboardPa
 
 import { SellerSignup } from "../modules/seller/pages/SellerSignupPage";
 import { SellerDashboard } from "../modules/seller/pages/SellerDashboardPage";
+import { SellerEditProfile } from "../modules/seller/pages/SellerEditProfilePage";
 
 import { DeliveryPersonSignup } from "../modules/deliveryPerson/pages/DeliveryPersonSignupPage";
 import { DeliveryPersonDashboard } from "../modules/deliveryPerson/pages/DeliveryPersonDashboardPage";
@@ -65,6 +66,18 @@ export const router = createBrowserRouter([
         ),
         children: [
             { index: true, element: <Navigate to="/seller/dashboard" replace /> },
+            { path: "dashboard", element: <SellerDashboard /> },
+        ],
+    },
+    {
+        path: "/seller/edit-profile",
+        element: (
+            <PrivateRoute>
+                <SellerLayout />
+            </PrivateRoute>
+        ),
+        children: [
+            { index: true, element: <SellerEditProfile /> },
             { path: "dashboard", element: <SellerDashboard /> },
         ],
     },
