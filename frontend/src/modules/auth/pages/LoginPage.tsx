@@ -5,7 +5,7 @@ export const LoginPage = () => {
     const navigate = useNavigate();
 
     const handleLoginSuccess = () => {
-        navigate("/dashboard");
+        navigate("/");
     };
 
     return (
