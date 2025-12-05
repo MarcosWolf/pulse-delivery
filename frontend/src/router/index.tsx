@@ -1,6 +1,9 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
 import { LoginPage } from "../modules/auth/pages/LoginPage";
 import { NavigationLayout } from "../shared/layouts/NavigationLayout";
+import { CustomerSignupPage } from "../modules/customer/pages/CustomerSignupPage";
+import { SellerSignupPage } from "../modules/seller/pages/SellerSignupPage";
+import { RoleBasedRedirect } from "../shared/pages/RoleBasedRedirect";
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
     const token = localStorage.getItem("token");
@@ -18,6 +21,14 @@ export const router = createBrowserRouter([
         element: <LoginPage />,
     },
     {
+        path: "/customer/signup",
+        element: <CustomerSignupPage />,
+    },
+    {
+        path: "/seller/signup",
+        element: <SellerSignupPage />,
+    },
+    {
         path: "/",
         element: (
             <PrivateRoute>
@@ -27,11 +38,7 @@ export const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Navigate to="/" replace />,
-            },
-            {
-                path: "dashboard",
-                element: <Navigate to="/" replace />,
+                element: <RoleBasedRedirect />,
             },
         ],
     },

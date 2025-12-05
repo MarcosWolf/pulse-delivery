@@ -10,11 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "customers")
-public class Customer {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Customer extends User {
     private String phone;
 
     @Embedded
@@ -29,7 +25,4 @@ public class Customer {
             @AttributeOverride(name = "country", column = @Column(name = "customer_country"))
     })
     private Address address;
-
-    @OneToOne(mappedBy = "customer")
-    private User user;
 }

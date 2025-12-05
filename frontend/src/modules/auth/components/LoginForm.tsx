@@ -17,8 +17,8 @@ export const LoginForm = ({ onLoginSuccess }: LoginFormProps) => {
         try {
             const data: LoginRequest = { email, password };
             const result = await authService.login(data);
-            authService.saveToken(result.token);
-            onLoginSuccess();
+            const ok = authService.saveToken(result.token);
+            if (ok) onLoginSuccess();
         } catch (err) {
             setError("Invalid credentials");
         }

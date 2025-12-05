@@ -35,13 +35,13 @@ public abstract class OrderMapper {
     @AfterMapping
     protected void mapRelations(OrderDTO dto, @MappingTarget Order order) {
 
-        if (dto.customer() != null && dto.customer().id() != null) {
-            order.setCustomer(customerRepository.findById(dto.customer().id())
+        if (dto.customer() != null && dto.customer().user().id() != null) {
+            order.setCustomer(customerRepository.findById(dto.customer().user().id())
                     .orElseThrow(() -> new IllegalArgumentException("Customer not found")));
         }
 
-        if (dto.seller() != null && dto.seller().id() != null) {
-            order.setSeller(sellerRepository.findById(dto.seller().id())
+        if (dto.seller() != null && dto.seller().user() != null && dto.seller().user().id() != null) {
+            order.setSeller(sellerRepository.findById(dto.seller().user().id())
                     .orElseThrow(() -> new IllegalArgumentException("Seller not found")));
         }
 
