@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { SellerSignupForm } from "../components/SellerSignupForm";
+import { DeliveryPersonSignupForm } from "../components/DeliveryPersonSignupForm";
 
-export const SellerSignup = () => {
+export const DeliveryPersonSignup = () => {
     const navigate = useNavigate();
 
     const handleSignupSuccess = () => {
@@ -12,13 +12,13 @@ export const SellerSignup = () => {
         <div className="min-h-screen flex items-center justify-center bg-orange-50">
             <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
                 <h2 className="text 2xl font-bold text-orange-600 mb-6 text-center">
-                    Seller
+                    Delivery Person
                 </h2>
                 <h2 className="text 2xl font-bold text-orange-600 mb-6 text-center">
                     Create Account
                 </h2>
 
-                <SellerSignupForm onSignupSuccess={handleSignupSuccess} />
+                <DeliveryPersonSignupForm onSignupSuccess={handleSignupSuccess} />
             </div>
         </div>
     );
