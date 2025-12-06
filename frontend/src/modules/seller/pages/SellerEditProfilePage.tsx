@@ -22,6 +22,7 @@ export const SellerEditProfile = () => {
         const token = localStorage.getItem("token");
 
         if (!token) {
+            console.log("VOLTOU");
             navigate("/");
             return;
         }

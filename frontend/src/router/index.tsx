@@ -47,7 +47,7 @@ export const router = createBrowserRouter([
     {
         path: "/customer",
         element: (
-            <PrivateRoute>
+            <PrivateRoute allowedRoles={["CUSTOMER"]}>
                 <CustomerLayout />
             </PrivateRoute>
         ),
@@ -60,7 +60,7 @@ export const router = createBrowserRouter([
     {
         path: "/seller",
         element: (
-            <PrivateRoute>
+            <PrivateRoute allowedRoles={["SELLER"]}>
                 <SellerLayout />
             </PrivateRoute>
         ),
@@ -72,7 +72,7 @@ export const router = createBrowserRouter([
     {
         path: "/seller/edit-profile",
         element: (
-            <PrivateRoute>
+            <PrivateRoute allowedRoles={["SELLER"]}>
                 <SellerLayout />
             </PrivateRoute>
         ),
@@ -83,9 +83,9 @@ export const router = createBrowserRouter([
     },
 
     {
-        path: "/delivery",
+        path: "/deliveryperson",
         element: (
-            <PrivateRoute>
+            <PrivateRoute allowedRoles={["DELIVERYPERSON"]}>
                 <DeliveryPersonLayout />
             </PrivateRoute>
         ),
