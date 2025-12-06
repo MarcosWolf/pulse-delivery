@@ -12,14 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "delivery_person")
-public class DeliveryPerson {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String name;
+public class DeliveryPerson extends User {
     private String phone;
     private String document;
-    private boolean active;
-    private LocalDateTime createdAt = LocalDateTime.now();
 }
