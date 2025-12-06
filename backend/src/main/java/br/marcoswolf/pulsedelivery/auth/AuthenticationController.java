@@ -50,6 +50,7 @@ public class AuthenticationController {
         SignupResponseDTO response = new SignupResponseDTO(
                 user.id(),
                 user.email(),
+                user.role(),
                 token
         );
 
