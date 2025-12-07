@@ -4,7 +4,7 @@ import type { DeliveryPersonSignupResponse } from "../types/DeliveryPersonSignup
 
 export class DeliveryPersonSignupService {
   async signup(data: DeliveryPersonSignupRequest): Promise<DeliveryPersonSignupResponse> {
-    const response = await api.post<DeliveryPersonSignupResponse>(`/signup`, data);
+    const response = await api.post<DeliveryPersonSignupResponse>("auth/signup", data);
     return response.data;
 }
 

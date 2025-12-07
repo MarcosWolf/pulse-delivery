@@ -1,6 +1,13 @@
+import { jwtDecode } from "jwt-decode";
 import { api } from "../../../shared/services/api";
 import type { LoginRequest } from "../types/LoginRequest";
 import type { LoginResponse } from "../types/LoginResponse";
+
+type JwtPayload = {
+  id: number;
+  email: string;
+  role: string;
+};
 
 export class AuthService {
   async login(data: LoginRequest): Promise<LoginResponse> {
@@ -19,5 +26,17 @@ export class AuthService {
 
   removeToken() {
     localStorage.removeItem("token");
+  }
+
+  getDecodedUser(): JwtPayload | null {
+    const token = this.getToken();
+
+    if (!token) return null;
+
+    try {
+      return jwtDecode<JwtPayload>(token);
+    } catch {
+      return null;
+    }
   }
 }

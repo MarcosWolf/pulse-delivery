@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { SellerEditProfileForm } from "../components/SellerEditProfileForm";
 import { useAuthUser } from "../../auth/hooks/useAuthUser";
-import { useSeller } from "../hooks/useSeller";
+import { useCustomer } from "../hooks/useCustomer";
 
-export const SellerEditProfile = () => {
+export const CustomerEditProfile = () => {
     const navigate = useNavigate();
     const { user } = useAuthUser();
 
@@ -13,11 +12,9 @@ export const SellerEditProfile = () => {
         return;
     }
 
-    const { seller, loading, setSeller } = useSeller(user.id);
+    const { customer, loading, setCustomer } = useCustomer(user.id);
 
-    if (loading) return <div className="text-center mt-6">Loading...</div>;
-
-    if (!seller) {
+    if (!customer) {
         navigate("/");
         return;
     }
@@ -26,5 +23,5 @@ export const SellerEditProfile = () => {
         <div>
             Edit profile
         </div>
-    );
-};
+    )
+}

@@ -11,14 +11,14 @@ import { Home } from "../modules/home/pages/HomePage";
 
 import { CustomerSignup } from "../modules/customer/pages/CustomerSignupPage";
 import { CustomerDashboard } from "../modules/customer/pages/CustomerDashboardPage";
+import { CustomerEditProfile } from "../modules/customer/pages/CustomerEditProfilePage";
 
 import { SellerSignup } from "../modules/seller/pages/SellerSignupPage";
 import { SellerDashboard } from "../modules/seller/pages/SellerDashboardPage";
 import { SellerEditProfile } from "../modules/seller/pages/SellerEditProfilePage";
 
-import { DeliveryPersonSignup } from "../modules/deliveryPerson/pages/DeliveryPersonSignupPage";
-import { DeliveryPersonDashboard } from "../modules/deliveryPerson/pages/DeliveryPersonDashboardPage";
-
+import { DeliveryPersonSignup } from "../modules/deliveryPerson/pages/DeliveryPersonSignup";
+import { DeliveryPersonDashboard } from "../modules/deliveryPerson/pages/DeliveryPersonDashboard";
 
 export const router = createBrowserRouter([
     {
@@ -53,6 +53,18 @@ export const router = createBrowserRouter([
         ),
         children: [
             { index: true, element: <Navigate to="/customer/dashboard" replace /> },
+            { path: "dashboard", element: <CustomerDashboard /> },
+        ],
+    },
+    {
+        path: "/customer/edit-profile",
+        element: (
+            <PrivateRoute allowedRoles={["CUSTOMER"]}>
+                <SellerLayout />
+            </PrivateRoute>
+        ),
+        children: [
+            { index: true, element: <CustomerEditProfile /> },
             { path: "dashboard", element: <CustomerDashboard /> },
         ],
     },
