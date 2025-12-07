@@ -2,6 +2,7 @@ package br.marcoswolf.pulsedelivery.dto.seller;
 
 import br.marcoswolf.pulsedelivery.dto.address.AddressDTO;
 import br.marcoswolf.pulsedelivery.dto.user.UserDTO;
+import br.marcoswolf.pulsedelivery.model.Image;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -21,6 +22,11 @@ public record SellerDTO (
         @Valid
         @Schema(description = "Seller phone", example = "13912345678")
         String phone,
+
+        @NotNull(message = "Image is required")
+        @Valid
+        @Schema(description = "Profile image")
+        Image image,
 
         @NotNull(message = "Address is required")
         @Valid

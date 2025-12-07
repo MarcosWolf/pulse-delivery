@@ -3,6 +3,8 @@ package br.marcoswolf.pulsedelivery.auth;
 import br.marcoswolf.pulsedelivery.dto.auth.SignupRequestDTO;
 import br.marcoswolf.pulsedelivery.dto.user.UserInfoDTO;
 import br.marcoswolf.pulsedelivery.model.Customer;
+import br.marcoswolf.pulsedelivery.model.DeliveryPerson;
+import br.marcoswolf.pulsedelivery.model.Seller;
 import br.marcoswolf.pulsedelivery.model.User;
 import br.marcoswolf.pulsedelivery.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,19 +25,38 @@ public class AuthService {
             throw new RuntimeException("Email already in use");
         }
 
-        Customer customer = new Customer();
-        customer.setName(requestDTO.name());
-        customer.setEmail(requestDTO.email());
-        customer.setPassword(passwordEncoder.encode(requestDTO.password()));
-        customer.setRole(requestDTO.role());
+        User user;
 
-        User savedUser = repository.save(customer);
+        switch (requestDTO.role()) {
+            case CUSTOMER:
+                user = new Customer();
+                break;
+
+            case SELLER:
+                user = new Seller();
+                break;
+
+            case DELIVERYPERSON:
+                user = new DeliveryPerson();
+                break;
+
+            default:
+                throw new RuntimeException("Invalid role");
+        }
+
+        user.setName(requestDTO.name());
+        user.setEmail(requestDTO.email());
+        user.setPassword(passwordEncoder.encode(requestDTO.password()));
+        user.setRole(requestDTO.role());
+        user.setActive(true);
+
+        User saved = repository.save(user);
 
         return new UserInfoDTO(
-                savedUser.getId(),
-                savedUser.getName(),
-                savedUser.getEmail(),
-                savedUser.getRole()
+                saved.getId(),
+                saved.getName(),
+                saved.getEmail(),
+                saved.getRole()
         );
     }
 }

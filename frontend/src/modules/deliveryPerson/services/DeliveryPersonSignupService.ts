@@ -1,12 +1,10 @@
-import axios from "axios";
+import { api } from "../../../shared/services/api";
 import type { DeliveryPersonSignupRequest } from "../types/DeliveryPersonSignupRequest";
 import type { DeliveryPersonSignupResponse } from "../types/DeliveryPersonSignupResponse";
 
 export class DeliveryPersonSignupService {
-  private readonly baseUrl = "http://localhost:8080/auth";
-
   async signup(data: DeliveryPersonSignupRequest): Promise<DeliveryPersonSignupResponse> {
-    const response = await axios.post<DeliveryPersonSignupResponse>(`${this.baseUrl}/signup`, data);
+    const response = await api.post<DeliveryPersonSignupResponse>("auth/signup", data);
     return response.data;
 }
 

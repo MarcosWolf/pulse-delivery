@@ -11,13 +11,14 @@ import { Home } from "../modules/home/pages/HomePage";
 
 import { CustomerSignup } from "../modules/customer/pages/CustomerSignupPage";
 import { CustomerDashboard } from "../modules/customer/pages/CustomerDashboardPage";
+import { CustomerEditProfile } from "../modules/customer/pages/CustomerEditProfilePage";
 
 import { SellerSignup } from "../modules/seller/pages/SellerSignupPage";
 import { SellerDashboard } from "../modules/seller/pages/SellerDashboardPage";
+import { SellerEditProfile } from "../modules/seller/pages/SellerEditProfilePage";
 
-import { DeliveryPersonSignup } from "../modules/deliveryPerson/pages/DeliveryPersonSignupPage";
-import { DeliveryPersonDashboard } from "../modules/deliveryPerson/pages/DeliveryPersonDashboardPage";
-
+import { DeliveryPersonSignup } from "../modules/deliveryPerson/pages/DeliveryPersonSignup";
+import { DeliveryPersonDashboard } from "../modules/deliveryPerson/pages/DeliveryPersonDashboard";
 
 export const router = createBrowserRouter([
     {
@@ -46,7 +47,7 @@ export const router = createBrowserRouter([
     {
         path: "/customer",
         element: (
-            <PrivateRoute>
+            <PrivateRoute allowedRoles={["CUSTOMER"]}>
                 <CustomerLayout />
             </PrivateRoute>
         ),
@@ -55,11 +56,23 @@ export const router = createBrowserRouter([
             { path: "dashboard", element: <CustomerDashboard /> },
         ],
     },
+    {
+        path: "/customer/edit-profile",
+        element: (
+            <PrivateRoute allowedRoles={["CUSTOMER"]}>
+                <SellerLayout />
+            </PrivateRoute>
+        ),
+        children: [
+            { index: true, element: <CustomerEditProfile /> },
+            { path: "dashboard", element: <CustomerDashboard /> },
+        ],
+    },
 
     {
         path: "/seller",
         element: (
-            <PrivateRoute>
+            <PrivateRoute allowedRoles={["SELLER"]}>
                 <SellerLayout />
             </PrivateRoute>
         ),
@@ -68,11 +81,23 @@ export const router = createBrowserRouter([
             { path: "dashboard", element: <SellerDashboard /> },
         ],
     },
+    {
+        path: "/seller/edit-profile",
+        element: (
+            <PrivateRoute allowedRoles={["SELLER"]}>
+                <SellerLayout />
+            </PrivateRoute>
+        ),
+        children: [
+            { index: true, element: <SellerEditProfile /> },
+            { path: "dashboard", element: <SellerDashboard /> },
+        ],
+    },
 
     {
-        path: "/delivery",
+        path: "/deliveryperson",
         element: (
-            <PrivateRoute>
+            <PrivateRoute allowedRoles={["DELIVERYPERSON"]}>
                 <DeliveryPersonLayout />
             </PrivateRoute>
         ),

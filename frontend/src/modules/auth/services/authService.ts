@@ -1,12 +1,17 @@
-import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import { api } from "../../../shared/services/api";
 import type { LoginRequest } from "../types/LoginRequest";
 import type { LoginResponse } from "../types/LoginResponse";
 
-export class AuthService {
-  private readonly baseUrl = "http://localhost:8080/auth";
+type JwtPayload = {
+  id: number;
+  email: string;
+  role: string;
+};
 
+export class AuthService {
   async login(data: LoginRequest): Promise<LoginResponse> {
-    const response = await axios.post<LoginResponse>(`${this.baseUrl}/login`, data);
+    const response = await api.post<LoginResponse>(`auth/login`, data);
     return response.data;
   }
 
@@ -21,5 +26,17 @@ export class AuthService {
 
   removeToken() {
     localStorage.removeItem("token");
+  }
+
+  getDecodedUser(): JwtPayload | null {
+    const token = this.getToken();
+
+    if (!token) return null;
+
+    try {
+      return jwtDecode<JwtPayload>(token);
+    } catch {
+      return null;
+    }
   }
 }

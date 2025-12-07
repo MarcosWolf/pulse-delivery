@@ -1,12 +1,10 @@
-import axios from "axios";
+import { api } from "../../../shared/services/api";
 import type { CustomerSignupRequest } from "../../customer/types/CustomerSignupRequest";
 import type { CustomerSignupResponse } from "../../customer/types/CustomerSignupResponse";
 
 export class CustomerSignupService {
-  private readonly baseUrl = "http://localhost:8080/auth";
-
   async signup(data: CustomerSignupRequest): Promise<CustomerSignupResponse> {
-    const response = await axios.post<CustomerSignupResponse>(`${this.baseUrl}/signup`, data);
+    const response = await api.post<CustomerSignupResponse>("/auth/signup", data);
     return response.data;
 }
 
