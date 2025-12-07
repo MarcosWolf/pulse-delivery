@@ -15,4 +15,7 @@ import java.time.LocalDateTime;
 public class DeliveryPerson extends User {
     private String phone;
     private String document;
+
+    @Embedded
+    private Image image;
 }

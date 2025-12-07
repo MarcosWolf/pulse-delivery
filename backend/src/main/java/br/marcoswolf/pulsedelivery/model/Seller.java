@@ -14,8 +14,8 @@ public class Seller extends User {
     private String phone;
     private String document;
 
-    @Column(name = "store_image_url")
-    private String storeImageUrl;
+    @Embedded
+    private Image image;
 
     @Embedded
     @AttributeOverrides({

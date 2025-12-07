@@ -6,6 +6,7 @@ import br.marcoswolf.pulsedelivery.mapper.AddressMapper;
 import br.marcoswolf.pulsedelivery.mapper.SellerMapper;
 import br.marcoswolf.pulsedelivery.dto.seller.SellerUpdateDTO;
 import br.marcoswolf.pulsedelivery.model.Address;
+import br.marcoswolf.pulsedelivery.model.Image;
 import br.marcoswolf.pulsedelivery.model.Seller;
 import br.marcoswolf.pulsedelivery.repository.SellerRepository;
 import jakarta.transaction.Transactional;
@@ -64,19 +65,26 @@ public class SellerService {
             String extension = originalName != null && originalName.contains(".")
                     ? originalName.substring(originalName.lastIndexOf("."))
                     : "";
-
             String newFileName = UUID.randomUUID() + extension;
 
             Path filePath = uploadPath.resolve(newFileName);
             Files.copy(file.getInputStream(), filePath);
 
-            String publicUrl = ServletUriComponentsBuilder
-                    .fromCurrentContextPath()
-                    .path("/" + UPLOAD_PATH + "/")
-                    .path(newFileName)
-                    .toUriString();
+            String publicUrl;
 
-            seller.setStoreImageUrl(publicUrl);
+            try {
+                publicUrl = ServletUriComponentsBuilder
+                        .fromCurrentContextPath()
+                        .path("/" + UPLOAD_PATH + "/")
+                        .path(newFileName)
+                        .toUriString();
+            } catch (IllegalStateException e) {
+                publicUrl = "/" + UPLOAD_PATH + "/" + newFileName;
+            }
+
+            Image image = new Image(publicUrl);
+
+            seller.setImage(image);
 
             return repository.save(seller);
         } catch (IOException e) {

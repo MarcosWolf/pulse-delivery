@@ -13,5 +13,6 @@ public interface SellerMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "address", ignore = true)
+    @Mapping(target = "image", ignore = true)
     void updateSellerFromDTO(SellerUpdateDTO dto, @MappingTarget Seller entity);
 }
